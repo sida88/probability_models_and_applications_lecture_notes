@@ -1,0 +1,270 @@
+% !TeX root = main.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+
+\textbf{Disclaimer}: There are many ways to understand probability theory.
+\begin{itemize}
+    \item Formal: Uses the language of Measure Theory, IERG 6300
+    \item \textbf{By wanting to model some real world phenomena}
+    \item Through Puzzles and Brain Teasers
+\end{itemize}
+
+%
+
+\section{Probability Spaces}
+ Probability is used to model the \textit{chance} of seeing certain outcomes in a given experiment.
+
+ \textbf{$\Omega$}: The set of all possible outcomes of the experiment. A particular outcome may be demoted by $\omega$. The set $\Omega$ is also called as the \textit{sample space}.
+
+ \textbf{$\mathcal{F}$}: The set of all \textit{collections of outcomes} that we are interested in assigning a chance/probability. In other words $\mathcal{F}$ consists of subsets of $\Omega$. Elements of $\mathbf{F}$ are called \textit{events}.
+
+ We shall further assume that $\mathcal{F}$ has the following properties:
+ \begin{align}
+     &\Omega \in \mathcal{F}, \nonumber\\
+     &A \in \mathcal{F} \implies  A^c \in \mathcal{F} \label{eq:sigma},\\
+     &A_1,A_2,..  \in \mathcal{F} \implies \cup_i A_i \in \mathcal{F}. \nonumber
+ \end{align}
+
+ $\mathcal{P}$: A function that maps the elements in $\mathcal{F}$ to $[0,1]$ that satisfies the following properties:
+ \begin{align}
+      &\Pc(\Omega)=1 \label{eq:prob} \\
+      &\mbox{Let}~ A_1,A_2,..  \in \mathcal{F} ~ \mbox{ such that they are pairwise disjoint}, i.e. A_i \cap A_j = \emptyset, ~ \mbox{if}~ i \neq j,  \nonumber \\
+      & \qquad  ~ \mbox{then}~ \Pc(\cup_i A_i) = \sum_i \Pc(A_i). \nonumber
+ \end{align}
+ We call $\Pc(A)$ to be the \textit{Probability of event} $A$, for $A \in \Fc$.
+
+
+% \begin{remark}
+% \label{re:natural}
+% If the experiment can only a finite number of outcomes, i.e. the cardinality of $\Omega$, denoted by $|\Omega|$ is finite; or the experiment can only have a \textit{countably infinite} number of outcomes -- in either case there is a natural choice for $\mathcal{F}$. The natural choice is to have $\mathcal{F}$ to be the collection of all subsets of $\Omega$. \\
+% For such spaces $(\Omega,\Fc)$, let us denote $\Omega = \{ \omega_1, \omega_2, \ldots\}$. One way to easily describe $\Pc$ is to provide a value to each single outcome of the experiment. For instance, $\Pc(\omega_i) = p_i$, such that $0 \leq p_i$ and $\sum_i p_i = 1$. Then for any set $A \subseteq  \Omega$, we will have $\Pc(A) = \sum_{i: \omega_i \in A} p_i$.
+% \end{remark}
+
+% \begin{remark}
+% \label{re:nonatural}
+% On the other hand there are experiments that have an uncountable number of possible outcomes, for instance an experiment whose outcome is a real number in the interval $[0,1]$. In such spaces, there is a more delicate relationship between $\Fc$ and $\Pc$. If you choose $\Fc$ to be the collection of all subsets of $[0,1]$, some natural definitions of probability that we would like to have will no longer be valid, satisfy the conditions. Therefore the normal practice is to define $\Fc$ to be just large enough so that we can talk about interesting classes of probabilities for all the events in $\Fc$. A very natural $\Fc$ when $\Omega =[0,1]$ is to defined it as the smallest collection that contains all the open intervals $(a,b) \subseteq [0,1]$ and satisfies the conditions in \eqref{eq:sigma}.
+% \end{remark}
+
+
+% \textit{Luckily for us}: We will be dealing with spaces with countable number of outcomes most of the time and not really have to get into the messy details associated with uncountable outcomes. In cases where we do deal with uncountable spaces, we will still try to keep things simple and at an intuitive level (which can be made rigorous).
+
+ \begin{exmp}[Single Coin Toss]{em:ct} The outcomes of a single coin toss:\\
+ $\Omega = \{H,T\}$ and $\mathcal{F} = \{ \emptyset, \{H\}, \{T\}, \{H,T\}\}$.
+ \end{exmp}
+
+ \begin{exmp}[Two Coin Tosses]{em:tct} The outcomes of two coin tosses:\\
+ $\Omega = \{HH,HT,TH,TT\}$ and $\mathcal{F} = \{ \emptyset, \{HH\}, \{HT\}, \{TH\}, \{TT\}, \{HH,HT\},\\ \{HH,TH\},\{HH,TT\},\{HT,TH\}, \{HT,TT\},\{TH,TT\},\{HH,HT,TH\},\{HH,HT,TT\},\\ \{HH,TH,TT\},\{HT,TH,TT\},  \{HH,HT,TH,TT\} \}$.
+ \end{exmp}
+ In this example, identify the following:
+ \begin{itemize}
+     \item The event corresponding to "outcomes of both tosses being the same".
+     \item The event corresponding to "first coin toss results in a head".
+     \item The event corresponding to "either the first coin toss did not result in a H or the second coin toss did not result in a T".
+ \end{itemize}
+
+ For this experiment we can define many probability functions. Here are two of them:
+ \begin{itemize}
+     \item $\Pc_1(\{HH\}) = \frac 12$ and $\Pc_1(\{TT\})=\frac 12$.
+     \item $\Pc_2(\{HH\}) = 0.2601$, $\Pc_2(\{HT\})= \Pc_2(\{HT\}) = 0.2499$, $\Pc_2(\{TT\})=0.2401$.
+ \end{itemize}
+
+ \subsection{Finite sample space}
+
+ In this case a natural model for $\Fc$ is to set it to $\Fc=2^\Omega$, the power set, i.e. the set of all subsets of $\Omega$. If not specified explicitly, we will assume that $\Fc=2^\Omega$ when $\Omega$ is finite.
+
+ \subsubsection{Uniform probability model}
+ One of the earliest models of probability that was used when, $|\Omega|$ was finite, was to set $\Pc(\omega)=\frac{1}{|\Omega|}, \forall \omega \in \Omega$.
+Then $\Pc(A) = \frac{|A|}{|\Omega|}$, and hence $\Pc(A) \propto |A|$. Thus probability and counting became quite intertwined. We call this the \textit{uniform probability model}.
+
+
+
+\begin{excr}[Chance of no left-handed]{ex:rhpeople}
+ An experiment consists of choosing a group of 10 people from a population of 10000 people. Assume that 2000 people are left-handed and the rest are right-handed. Consider the event, A, that the group chosen does not contain a left-handed person. What is the probability of $A$ under the uniform probability model.?
+\end{excr}
+\begin{soln}[Chance of no left-handed]{so:rhpeople}
+What is the set of all outcomes, $\Omega$: Here the sample space or outcomes of the experiment is  all groups of 10 people from 10000 people. Hence $|\Omega|=\binom{10000}{10}.$ \\
+What is the event $A$ we are interested in: It is the collection of all outcomes that doe not have a left-handed person. Hence $|A|=\binom{8000}{10}$.\\
+Therefore, under the uniform probability model $\Pc(A) = \frac{|A|}{|\Omega|} = \frac{\binom{8000}{10}}{\binom{10000}{10}}$. If we want to get a feel of $\Pc(A)$, we can use the following bounds:
+$$0.1061 \approx (0.7991)^{10} <  \frac{\binom{8000}{10}}{\binom{10000}{10}} < (0.8)^{10} \approx 0.1074.$$
+\end{soln}
+
+ \begin{excr}[Tossing a Dice]{ex:Dice-Toss}
+ A six-sided dice with sides numbered $\{1,2,3,4,5,6\}$ is tossed 4 times. Assume the uniform probability model. What is the probability that the sum of the numbers on the sides facing up adds up to 10.
+ \end{excr}
+ \begin{soln}[Tossing a Dice]{so:Dice-Toss}
+ $\Omega: \{1111,1112,\ldots,2435, \ldots, 6666  \}$ is the collection of all possible outcomes. Therefore $|\Omega| = 6^4$. The event we are interested in, say $A$, consists of outcomes like $\{1432, 2512,...,\}$, i.e. all the outcomes whose numbers add to 10. Thus to compute the probability of $A$ we need to compute $|A|$. This becomes a counting question. How many ways are there to pick four positive integers, , $x_1, x_2, x_3, x_4$, between $1$ and $6$ so that their sum is 10? If I remove the upper bound of $6$, then this is a standard exercise whose answer is $\binom{9}{3}$. Therefore to find the set of outcomes that conform to the upper bound, we just have to remove the outcomes $7111,1711,1171,1117$. Therefore $|A|=\binom{9}{3} - 4 =80$. Hence $\Pc(A) = \frac{80}{6^4}$.
+ \end{soln}
+
+\begin{excr}[Coin Toss]{ex:cointoss}
+A coin is tossed 10 times. Assume the uniform probability model. What is the probability that there are 4, 5, or 6 heads?
+\end{excr}
+\begin{soln}[Coin Toss]{so:cointoss}
+$\Omega$: All possible outcomes, $\{ HHHHHHHHHH, HHTTHTHHTT, \dots,\\ HTTTTHTTTT, \ldots, TTTTTTTTTT\}$. Note that $|\Omega|=2^{10}$.
+
+The event $A$: $A=\{HHTTHTTHTT,..,\ldots,..TTTTHHHHHH \}$, out outcomes that have exactly four, five, or six heads. Thus $|A| = \binom{10}{4} + \binom{10}{5} + \binom{10}{6} = $.
+Hence $\Pc(A) = \frac{|A|}{|\Omega|} = \frac{672}{1024}. $
+\end{soln}
+
+\subsubsection{Other probability models}
+
+Let $\Omega=\{\omega_1, \omega_2, \ldots, \omega_k\}$. Then all probability models in this space can be generated by assigning
+$$ \Pc(\omega_i)=p_i, ~~~i=1,..,k$$
+where $p_i \geq 0 ~ \forall i$, and $\sum_{i=1}^k p_i = 1$.
+
+You can redo the previous exercises by playing around with different choices of probability models.
+
+
+\subsection{Countably infinite sample space}
+Many experiments (in abstraction) go beyond having a finite number of outcomes. Even in this case the  natural model for $\Fc$ is to set it to $\Fc=2^\Omega$, the power set, i.e. the set of all subsets of $\Omega$. If not specified explicitly, we will assume that $\Fc=2^\Omega$ when $\Omega$ is countably infinite.
+
+\begin{exmp}[Seeing a Head for the first time]{em:countinf}
+Consider the following experiment. We toss a coin multiple times and stop the experiment when we see the first occurrence of a head. Here the set of outcomes is
+$$ \Omega = \{H, TH, TTH, TTTH, TTTTH,... \}$$
+Let us define $\omega_i, i \geq 1$ to be the outcome that has $i-1$ tails followed by a head. Note that $|\Omega|$ is countably infinite.
+
+A uniform probability model on this $\Omega$ does not make sense. Reason: For such a model $P(\{\omega_i\}) = \frac{1}{|\Omega|} = 0$. However $\Omega = \cup_i \omega_i$, and hence for a probability measure we require
+$$ 1= \Pc(\Omega) = \sum_{i=1}^\infty \Pc(\omega_i) = \lim_{k \to \infty} \sum_{i=1}^k \Pc(\omega_i) = 0,$$
+a contradiction. \end{exmp}
+
+Therefore a natural way to define a probability model when $\Omega=\{\omega_1, \omega_2,..\}$ is countably infinite is to assign:
+$$ \Pc(\omega_i) = p_i, ~ i \geq 1$$
+where $0 \leq p_i$ and $\sum_{i=1}^\infty p_i=1$. For instance in the previous example, you could have chosen $p_i = \frac{1}{2^i}, i \geq 1$.
+
+\subsection{Uncountably infinite sample space}
+Sometimes one also has to deal with (thought) experiments that have uncountably many outcomes.
+
+\begin{exmp}[Picking a number in the unit interval]{em:uncinf}
+Consider the experiment when the outcome of the experiment is a real number in the interval $[0,1]$. Thus
+$$ \Omega = [0,1],$$
+and the number of outcomes are uncountably infinite.
+\end{exmp}
+
+\begin{remark} In such spaces one starts seeing "mathematical" issues that one does not see when $\Omega$ is finite or countably infinite. In particular, if one wants to assign a probability of seeing an outcome in $(a,b)$ (for any $0 < a < b < 1$) to be $|b-a|$, it turns out that one cannot\footnote{This statement is assuming the Axiom of Choice. For more details at a layman's level see \url{https://en.wikipedia.org/wiki/Vitali_set}} take $\Fc$ to be the powerset, $2^{\Omega}$. \adv The main reason for arriving at a contradiction is that one can construct a countable infinite collection of pairwise disjoint sets, each of which is a translation of the other (and hence must have the same "length" or probability), whose union is the interval $[0,1]$. However as seems earlier, we cannot assign a uniform probability for each event on a countable number of pairwise disjoint events whose union is the entire space.
+\end{remark}
+
+Is there a "natural" choice of event space $\Fc$, satisfying \ref{eq:sigma}, when $\Omega=[0,1]$, or more generally $\Omega=\mathbb{R}$, or $\Omega=\mathbb{R}^d$. In other words, is there an $\Fc$ where we can assign probability to most events that "we care about". Yes, there is such an $\Fc$ and in this class we will always assume this choice of $\Fc$. Such an event space is called the \textit{Borel} $\sigma$-algebra, $\Bc$. It is defined as the smallest $\Fc$ satisfying \ref{eq:sigma} that contains all the open intervals, (or open rectangles in $\mathbb{R}^d$).
+
+\begin{remark}
+A curious reader may ask what does one mean by the "smallest". It turns out that arbitrary intersections of $\Fc_\alpha$, each of which  satisfying \ref{eq:sigma}, also satisfies \ref{eq:sigma}. \adv Therefore one can take the intersection of all $\Fc_\alpha$ that contain all the open intervals and take their intersection to define the smallest. Unfortunately, it is quite hard to explicitly state what such a collection should look like. Interested readers can look at \url{https://en.wikipedia.org/wiki/Borel_set}.
+\end{remark}
+
+The next natural question is how does one describe probabilities for these spaces? Let us try to mimic the countably infinite model and say that we assign different probabilities to each outcomes. This will not work unfortunately.
+
+\begin{remark}The reason is the following: Suppose such a probability could be defined, then define
+$$ A_n = \{\omega: \Pc(\omega) \geq \frac{1}{n}\} ~~ n \geq 1.$$
+The following is now clear: $|A_n| \leq n$ (why?), and $B:= \cup_{n=1}^\infty A_n = \{\omega: \Pc(\omega)> 0\}$. \adv However countable union of finite (countable) sets is countable; hence $B$ is countable. Either $\Pc(B)=1$ or $\Pc(B) < 1$. If $\Pc(B) < 1$, then one is left wondering where did the remaining probability vanish. Clearly it was not assigned to particular outcomes.
+
+If $\Pc(B)=1$, then  except for a countable collection of outcomes, the rest of the space has zero probability. Then we could have reassigned $\Omega = B$, and then we would be reduced to an experiment with countable number of outcomes. \end{remark}
+
+Let us take $\Omega=\mathbb{R}$. The standard way of describing probabilities on $\Bc$ would be to define the function:
+$$ F(x)=\Pc\{\omega: \omega \leq x\}, ~~ x\in \mathbb{R}.$$
+It is a Theorem (beyond the scope of this class) that every probability on $\Bc$ generates and is generated by a function $F(x)$ that satisfies all the three conditions below:
+\begin{enumerate}[$(i)$]
+\item $F(x)$ is non-decreasing,
+\item $\lim_{x \to -\infty} ~~ F(x) = 0, ~~~~~ \lim_{x \to +\infty} ~~ F(x) = 1$
+\item $F(x)$ is right-continuous.
+\end{enumerate}
+
+\begin{excr}[Real Variables]{ex:sqrt}
+Let $\Omega=\mathbb{R}$. Consider a probability measure defined
+$$ \Pc\{\omega: \omega \leq x\}  = \begin{cases} \begin{array}{cc} 0 & x \leq 0\\ \sqrt{x} & x \in [0,1] \\ 1 & x \geq 1 \end{array}\end{cases}.$$
+Let $A$ be the event that $\omega$ expressed in \textit{base} 7 lies in the interval $[0.3, 0.5) \cup [0.6,1)$.
+\end{excr}
+\begin{soln}[Real Variables]{ex:sqrt}
+Converting the intervals to \textit{base} 10, we get that $\omega$ must lie in $[\frac{3}{7},\frac{5}{7}) \cup [\frac{6}{7},1). $ Hence
+$$ \Pc(A) = \sqrt{\frac{5}{7}} - \sqrt{\frac{3}{7}} + 1- \sqrt{\frac{6}{7}} = \frac{\sqrt{7} - \sqrt{6} + \sqrt{5} - \sqrt{3}}{\sqrt{7}}.$$
+\end{soln}
+
+\section{Conditional Probability}
+
+Let us assume that $|\Omega|$ is countably infinite, and that $\Pc(\omega_i)>0$ for every $i$. If we get the additional information that the real outcome $\omega \in A$ for some $A \in \Fc$, one can seek to understand what happens to the probabilities of generic events in $\Fc = 2^\Omega$.
+
+Suppose we wish to understand $\Pc(B)$ for some $B \in \Fc$, originally we know that $\Pc(B) = \sum_{\omega \in B} \Pc(\{\omega\}).$ However, given that we additionally know that $\omega \in A$, we can define $\Qc(B) = \sum_{\omega \in A \cap B} \Pc(\{\omega\}) = \Pc(A \cap B)$.
+
+Observe that $\Qc(\Omega) = \Pc(A)$ and it is not-necessarily equal to $1$, we can define a probability measure by normalizing $\Qc$ by $\Pc(A)$. Consider the probability measure defined as
+$$ \hat{\Qc}(B) = \frac{\Qc(B)}{\Pc(A)} = \frac{\Pc(A \cap B) }{\Pc(A)}.$$
+Observe that $\hat{\Qc}(A^c)=0$, thus the probability measure puts no chance of getting outcomes outside $A$. This probability measure is called the \textit{conditional probability measure}, conditioned on the event $A$. It is often expressed in short-hand notation as $\Pc(B|A)$. Thus we can write
+$$ \Pc(B|A) = \frac{\Pc(B \cap A)}{\Pc(A)}.$$
+
+\begin{excr}[Playing under pressure]{ex:tennis}
+Roger Federer and Stan Wawrinka is representing Switzerland in a Davis cup tie against Spain, playing singles matches against Rafael Nadal and David Ferrer (in that order)  respectively.
+We are given that the probability of a Federer win is $\frac{1}{3}$, and that the probability of a Wawrinka win is $\frac{1}{2}$. We are also given that the probability that Spain wins $2-0$ is $\frac{3}{10}$.
+\begin{enumerate}
+\item Compute the probability that David Ferrer won his match conditioned on the event that Spain lost the first match.
+\item Compute the probability that David Ferrer won his match conditioned on the event that Spain won the first match.
+\end{enumerate}
+\end{excr}
+\begin{soln}[Playing under pressure]{sol:tennis}
+Let us denote the four outcomes as $\Omega=\{RF-SW,RF-DF,RN-SW,RN-DF\}$. We are now given that $P(RF-SW) + P(RF-DF)=\frac{1}{3}, P(RF-SW) + P(RN-SW) = \frac 12,$ and $P(RN-DF) =\frac{3}{10}$. Along with $P(\Omega)=1$, we obtain
+$P(RF-SW)=\frac{2}{15}, P(RF-DF) = \frac{3}{15},  P(RN-SW) = \frac{11}{30}$.
+
+$\mathbf{1}$. ~ Let $A$ be the event that Spain lost the first match. Let $B$ be the event that David Ferrer won his match. Observe that
+$$ P(B|A) = \frac{P(B\cap A)}{P(A)}= \frac{P(RF-DF)}{P(RF-SW) + P(RF-DF)}=\frac{3}{5}.$$
+
+$\mathbf{2}$. ~ Observe that
+$$ P(B|A^c) = \frac{P(B\cap A^c)}{P(A^c)}= \frac{P(RN-DF)}{P(RN-SW) + P(RN-DF)}=\frac{9}{20}.$$
+\end{soln}
+
+\begin{remark}
+When $\Omega$ is uncountably infinite, one often would like to condition on events which have probability zero. This makes the definition of conditional probability undefined. However if the underlying space $\Omega$ is nice-enough (say $\mathbb{R}^d$) then \adv it turns out that one can define conditional probability even when conditioned on events that have probability zero.
+\end{remark}
+
+\section{Independence of Events}
+We start with a probability space $(\Omega, \mathcal F, P)$.
+Two events $A,B \in \mathcal{F}$ are said to be \textit{independent} if
+$$P(A \cap B) = P(A) P(B).$$
+
+\begin{remark}
+Intuitively, it means that the "chance" of seeing event $A$ remains same even if we condition on the fact that event $B$ has occurred. Hence the chance of seeing event A does not depend on the occurrence of event $B$.
+\end{remark}
+
+Observe that every event $A$ is independent of $\Omega$ and $\emptyset$. On the contrary, if a set $A$ is independent of itself, then we have $P(A) = P(A\cap A) = P(A) P(A) = P^2(A)$, implying $P(A)=0$ or $P(A)=1$.
+
+
+We say that events $A_1,..,A_n$ are \textit{mutually-independent} if
+$$P(A_{i_1}\cap \cdots \cap A_{i_l}) = \prod_{j=1}^l P(A_{i_j})$$
+for any subset $\{i_1,..,i_l\} \subseteq \{1,2,..,n\}$.
+
+A weaker notion is that of pairwise or $k$-wise independence. A set of events $A_1,..,A_n$ are \textit{$k$-wise independent} if the events $A_{i_1},...,A_{i_k}$ are mutually independent for any subset $\{i_1,..,i_k\} \subseteq \{1,2,..,n\}$. The case when $k=2$ is called \textit{pairwise} independent.
+
+An event $A$ is said to be independent of a collection of events $\{B_1,..,B_n\}$ if
+$$ P(A \cap B_{i_1}\cap \cdots \cap B_{i_l}) = P(A) P(B_{i_1}\cap \cdots \cap B_{i_l})   $$
+for any subset $\{i_1,..,i_l\} \subseteq \{1,2,..,n\}$.
+
+Finally, two collections of events $\{A_1,..,A_m\}$ and $\{B_1,..,B_n\}$ are said to be independent of each other if
+  $$ P(A_{i_1}\cap \cdots \cap A_{i_l} \cap B_{j_1}\cap \cdots \cap B_{j_k}) = P(A_{i_1}\cap \cdots \cap A_{i_l}) P(B_{j_1}\cap \cdots \cap B_{j+k})   $$
+for any pair of subsets $\{i_1,..,i_l\} \subseteq \{1,2,..,m\}$ and   $\{j_1,..,j_k\} \subseteq \{1,2,..,n\}$.
+
+\begin{exmp}[pairwise independence vs mutual independence]{ex:kvsm}
+Consider an experiment with the set of all possible outcomes being
+$$\Omega=\{HHH,HTT,THT,TTH\}$$
+with each outcome being equally likely. Let $A_1=\{HHH,HTT\}, A_2=\{HHH,THT\}, A_3=\{HHH,TTH\}$.
+
+Observe that $P(A_1)=P(A_2)=P(A_3)=\frac 12$, and $P(A_1 \cap A_2)=P(A_1 \cap A_3) = P(A_2 \cap A_3)=\frac 14$. Therefore the events $A_1, A_2, A_3$ are pair-wise independent.
+
+However $P(A_1 \cap A_2 \cap A_3)=P(\{HHH\})=\frac 14 \neq \frac 18 = P(A_1) P(A_2) P(A_3)$. Hence they are not mutually independent.
+
+Observe also that $A_1$ is independent of $A_2$ and $A_1$ is independent of $A_3$ but $A_1$ is not independent of $\{A_2,A_3\}$. To see this observe that
+$$ P(A_1 \cap A_2 \cap A_3)=P(\{HHH\})=\frac 14 \neq \frac 18 = P(A_1) P(A_2\cap A_3).  $$
+\end{exmp}
+
+\begin{remark}
+In general one can construct $k$ events such that there are $k-1$-wise independent but they are not mutually independent. One easy way to get such events is to through a $k$-sided dice and $\Omega$ $k$-times and to assign equal probability to all outcomes with sum of the numbers is divisible by $k$, and a zero probability to all other outcomes. Now we can define $A_i$ to be the event that $i^{th}$ toss resulted in a value $1$, for $i=\{1,..,k\}$.
+\end{remark}
+
+\subsubsection{Conditional Independence}
+Events $A$ and $B$ are said to be conditionally independent of each other given $C$ (we assume $P(C)>0$) if
+$$ P(A \cap B | C) = P(A|C) P(B|C).$$
+If $C=\Omega$, then we get that $A$ and $B$ are independent.
+
+
+Conditioning on events could induce or destroy independence between two events $A$ and $B$. IN the following example, the events $A$ and $B$ are not independent of each other, but conditioned on a third event $C$, they are independent of each other.
+
+\begin{exmp}[Coin toss]{ex:condind}
+Consider an experiment consisting of a coin being tossed 2 times.  $\Omega=\{HH,HT,TH,TT\}.$ Let $A=\{HH,HT\}$ be the event that first toss results in a head, and let $B=\{HH,TH\}$ be the event that second toss results in a head. Let $C=\{HH\}$ be the event that both tosses results in head. Assign probabilities to the outcomes as follows: $P(\{HH\})=\frac{1}{5}, P(\{HT\})=\frac{2}{5},P(\{TH\})=\frac{1}{5},P(\{TT\})=\frac{1}{5}.$
+
+Note that $P(A)=\frac{3}{5}, P(B)=\frac{2}{5}, P(A\cap B)=\frac{1}{5}, P(C)=P(A\cap C)=P(B\cap C)=P(A\cap B \cap C)=\frac{1}{5}.$ Therefore
+$$ P(A\cap B|C) = \frac{P(A\cap B \cap C)}{P(C)}=1 = \frac{P(A\cap C)}{P(C)} = \frac{P(B\cap C)}{P(C)} = P(A|C) P(B|C).$$
+Therefore $A$ and $B$ are conditionally independent given $C$. On the other hand $P(A \cap B)=\frac{1}{5} \neq \frac{3}{5} \frac{2}{5} = \frac{6}{25} = P(A)P(B)$, implying that $A$ and $B$ are not independent of each other.
+\end{exmp}
+

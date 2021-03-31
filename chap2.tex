@@ -1,0 +1,85 @@
+% !TeX root = main.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+
+Consider a probability space $(\Omega,\mathcal{F},P)$.
+
+1. Let $\Omega$ be finite or countably infinite and let $\mathcal{F}$ be the powerset, set of all subsets of $\Omega$. In this situation \textit{random variables} are real-valued functions of $\Omega$.
+
+2. In a more general probability space random variables are real-valued functions $X:\Omega \mapsto \mathbb{R}$ that satisfy:
+$$\{\omega: X(\omega) \in (a,b)\} \in \mathcal{F}, \quad \forall a,b \in \mathbb{R}.$$
+
+Random variables play a key role in probability and can be thought of as measurements of the outcome. Random variables, $X$, have a \textit{cumulative-distribution-function} associated with it: usually denoted by $F_X(x)$, defined as
+$$ F_X(x):= P(\{\omega: X(\omega)\leq x\}), x \in \mathbb{R}.$$
+
+There is a very important characterization theorem of cumulative distribution functions:
+
+A function $G(x)$ is a cumulative distribution function \textit{if and only if} it satisfies the conditions:
+\begin{enumerate}[$(i)$]
+\item $G(x)$ is non-decreasing,
+\item $\lim_{x \to -\infty} ~~ G(x) = 0, ~~~~~ \lim_{x \to +\infty} ~~ G(x) = 1$
+\item $G(x)$ is right-continuous.
+\end{enumerate}
+
+
+
+
+In literature random variables are classified into \textit{discrete-random-variables} and \textit{continuous-random-variables}.
+
+\begin{remark}
+This classification is partly misleading since there are random variables that are neither discrete nor continuous. These are usually called mixed type.
+\end{remark}
+
+\textbf{Discrete-random-variables}: These are random variables that take values in a finite or a countable infinite subset of $\mathbb{R}$. If $\Omega$ is finite or countably infinite, then all random variables defined on this space will be discrete random variables.
+
+Thus a discrete random variable $X$ take values in some subset $\{x_1, x_2, ...\}$ of $\mathbb{R}$. In this case, the cumulative distribution function is a non-decreasing piecewise-constant function that has discontinuities at $x_i$. Let $p_i = P(\{\omega:X(\omega)=x_i\})$, then we have
+$$ F_X(x) = \sum_{i:x_i \leq x} p_i.$$
+Observe that $F_X(x)$ has a "jump" of $p_i$ at value $x_i$.
+
+Therefore, for discrete valued random variables, it is common to define a \textit{probability-mass-function}, $p_X(x)$ defined as:
+$$ p_X(x_i) = p_i$$
+and $p_X(x)=0 $ if $x \notin \{x_1,x_2,..\}.$
+
+
+\textbf{Continuous-random-variables}: These are random variables, $X$, whose distribution function, $F_X$, is continuous in $\mathbb{R}$. For continuous random variables, it is common to define a \textit{probability-density-function}, $f_X$ (whose existence is beyond the scope of this class), satisfying
+$$  F_X(x) = \int_{-\infty}^x f_X(y) dy.$$
+Probability density functions are non-negative real-valued functions that integrate to one.
+
+\section{Discrete Random Variables}
+In this section we will study about some discrete random variables and their properties.
+
+\textit{Notation}: For brevity we will say $P(X=x_i)$ instead of $P(\{\omega: X(\omega)=x_i\})$.
+
+\begin{remark}
+In reality, the above notation has its advantages. It is possible to talk of random variables, without really specifying the underlying probability space $(\Omega,\mathcal{F},P)$.
+\end{remark}
+
+\subsection{Some Common Examples}
+
+\subsubsection{Bernoulli Random Variable} This is a random variable that takes two values $\{0,1\}$. As such it is used to distinguish whether an event $A$ or its complement $A^c$ has occurred.
+
+We say $X \sim \textrm{Ber}(p)$, $p \in [0,1]$, if $p_X(1)=p$, and $p_X(0)=1-p.$
+
+One should read $X \sim \textrm{Ber}(p)$ as $X$ is distributed according to a Bernoulli distribution with parameter $p$.
+
+There are many examples where Bernoulli random variables arise naturally:
+\begin{enumerate}
+    \item Denote by 1 if the outcome of a coin toss is a head, and $0$ otherwise.
+    \item Denote by $1$ if the roll of a dice results in an even number, $0$ otherwise.
+\end{enumerate}
+
+\subsubsection{Binomial Random Variable} This is a random variable that takes  values $\{0,1,2,...,n\}$.
+
+We say $X \sim \textrm{Bin}(n,p)$, $p \in [0,1]$, if
+$$ p_X(k)= \binom{n}{k}p^k(1-p)^{n-k},  0\leq k \leq n. $$
+Observe that $\textrm{Bin}(1,p)$ has the same distribution as $\textrm{Ber}(p)$.
+
+\subsubsection{Geometric Random Variable} This is a random variable that takes  values $\{0,1,2,...\}$.
+
+We say $X \sim \textrm{Geo}(p)$, $p \in [0,1]$, if
+$$ p_X(k)= (1-p) p^{k},  0\leq k, k \in \mathbb{N}. $$
+
+\subsubsection{Poisson Random Variable} This is a random variable that also takes  values $\{0,1,2,...\}$.
+
+We say $X \sim \textrm{Poi}(\lambda)$, $\lambda \geq 0$, if
+$$ p_X(k)=  \frac{\lambda^{k}}{k!}e^{-\lambda},  0\leq k, k \in \mathbb{N}. $$
