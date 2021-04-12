@@ -1,79 +1,101 @@
 % !TeX root = main.tex
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_GB
-
+%=================================================================
+\chapter{Introduction}
+%=================================================================
 \textbf{Disclaimer}: There are many ways to understand probability theory.
 \begin{itemize}
     \item Formal: Uses the language of Measure Theory, IERG 6300
     \item \textbf{By wanting to model some real world phenomena}
     \item Through Puzzles and Brain Teasers
 \end{itemize}
-
-%
-
+%=================================================================
 \section{Probability Spaces}
- Probability is used to model the \textit{chance} of seeing certain outcomes in a given experiment.
+%=================================================================
+% What is probability? probability is a convenient way to model outcomes of complex experiments.
+Probability is used to model the \textit{chance} of seeing certain outcomes in a given experiment.
 
- \textbf{$\Omega$}: The set of all possible outcomes of the experiment. A particular outcome may be demoted by $\omega$. The set $\Omega$ is also called as the \textit{sample space}.
+\textbf{$\Omega$}: The set of all possible outcomes of the experiment. A particular outcome may be denoted by $\omega$. The set $\Omega$ is also called as the \textit{sample space}.
 
- \textbf{$\mathcal{F}$}: The set of all \textit{collections of outcomes} that we are interested in assigning a chance/probability. In other words $\mathcal{F}$ consists of subsets of $\Omega$. Elements of $\mathbf{F}$ are called \textit{events}.
+%TODO: Add a remark that F is a sigma algebra, it is called the space of events
+% Elements of F are called events, so for example 2 there are 16 events
+\textbf{$\mathcal{F}$}: The set of all \textit{collections of outcomes} that we are interested in assigning a chance/probability. In other words $\mathcal{F}$ consists of subsets of $\Omega$. Elements of $\mathbf{F}$ are called \textit{events}.
+% Why can't we assign a probability to every outcome and then you know the probability for a collection of outcomes by just adding the probability of each outcome. That's a very valid question, we will get back to that shortly
 
- We shall further assume that $\mathcal{F}$ has the following properties:
- \begin{align}
-     &\Omega \in \mathcal{F}, \nonumber\\
-     &A \in \mathcal{F} \implies  A^c \in \mathcal{F} \label{eq:sigma},\\
-     &A_1,A_2,..  \in \mathcal{F} \implies \cup_i A_i \in \mathcal{F}. \nonumber
- \end{align}
-
- $\mathcal{P}$: A function that maps the elements in $\mathcal{F}$ to $[0,1]$ that satisfies the following properties:
- \begin{align}
-      &\Pc(\Omega)=1 \label{eq:prob} \\
-      &\mbox{Let}~ A_1,A_2,..  \in \mathcal{F} ~ \mbox{ such that they are pairwise disjoint}, i.e. A_i \cap A_j = \emptyset, ~ \mbox{if}~ i \neq j,  \nonumber \\
-      & \qquad  ~ \mbox{then}~ \Pc(\cup_i A_i) = \sum_i \Pc(A_i). \nonumber
- \end{align}
+% $\mathcal{F}$ must satisfy the following properties
+We shall further assume that $\mathcal{F}$ has the following properties:
+%-----------------------------------------------------------------
+%TODO: Itemize this part with roman numbers
+\begin{equation}
+    \begin{aligned}
+        & \Omega \in \mathcal{F}, \\
+        & A \in \mathcal{F} \implies  A^c \in \mathcal{F},\\
+        & A_1,A_2,\ldots  \in \mathcal{F} \implies \cup_{i} A_i \in \mathcal{F}.
+    \end{aligned}\label{eq:sigma}
+\end{equation}
+%-----------------------------------------------------------------
+%TODO: definition probability
+$\mathcal{P}$: A function that maps the elements in $\mathcal{F}$ to $[0,1]$ that satisfies the following properties:
+%-----------------------------------------------------------------
+\begin{align}
+    &\Pc(\Omega)=1 \label{eq:prob}\\
+    &\mbox{Let}~ A_1,A_2,..  \in \mathcal{F} ~ \mbox{ such that they are pairwise disjoint}, i.e. A_i \cap A_j = \emptyset, ~ \mbox{if}~ i \neq j,  \nonumber \\
+    & \qquad  ~ \mbox{then}~ \Pc(\cup_i A_i) = \sum_i \Pc(A_i). \nonumber
+\end{align}
+%-----------------------------------------------------------------
  We call $\Pc(A)$ to be the \textit{Probability of event} $A$, for $A \in \Fc$.
 
 
-% \begin{remark}
-% \label{re:natural}
-% If the experiment can only a finite number of outcomes, i.e. the cardinality of $\Omega$, denoted by $|\Omega|$ is finite; or the experiment can only have a \textit{countably infinite} number of outcomes -- in either case there is a natural choice for $\mathcal{F}$. The natural choice is to have $\mathcal{F}$ to be the collection of all subsets of $\Omega$. \\
-% For such spaces $(\Omega,\Fc)$, let us denote $\Omega = \{ \omega_1, \omega_2, \ldots\}$. One way to easily describe $\Pc$ is to provide a value to each single outcome of the experiment. For instance, $\Pc(\omega_i) = p_i$, such that $0 \leq p_i$ and $\sum_i p_i = 1$. Then for any set $A \subseteq  \Omega$, we will have $\Pc(A) = \sum_{i: \omega_i \in A} p_i$.
-% \end{remark}
+\begin{remark}\label{re:natural}
+    If the experiment can only a finite number of outcomes, i.e. the cardinality of $\Omega$, denoted by $|\Omega|$ is finite; or the experiment can only have a \textit{countably infinite} number of outcomes -- in either case there is a natural choice for $\mathcal{F}$. The natural choice is to have $\mathcal{F}$ to be the collection of all subsets of $\Omega$. \\
+    For such spaces $(\Omega,\Fc)$, let us denote $\Omega = \{ \omega_1, \omega_2, \ldots\}$. One way to easily describe $\Pc$ is to provide a value to each single outcome of the experiment. For instance, $\Pc(\omega_i) = p_i$, such that $0 \leq p_i$ and $\sum_i p_i = 1$. Then for any set $A \subseteq  \Omega$, we will have $\Pc(A) = \sum_{i: \omega_i \in A} p_i$.
+\end{remark}
 
-% \begin{remark}
-% \label{re:nonatural}
-% On the other hand there are experiments that have an uncountable number of possible outcomes, for instance an experiment whose outcome is a real number in the interval $[0,1]$. In such spaces, there is a more delicate relationship between $\Fc$ and $\Pc$. If you choose $\Fc$ to be the collection of all subsets of $[0,1]$, some natural definitions of probability that we would like to have will no longer be valid, satisfy the conditions. Therefore the normal practice is to define $\Fc$ to be just large enough so that we can talk about interesting classes of probabilities for all the events in $\Fc$. A very natural $\Fc$ when $\Omega =[0,1]$ is to defined it as the smallest collection that contains all the open intervals $(a,b) \subseteq [0,1]$ and satisfies the conditions in \eqref{eq:sigma}.
-% \end{remark}
+\begin{remark}\label{re:nonatural}
+     On the other hand there are experiments that have an uncountable number of possible outcomes, for instance an experiment whose outcome is a real number in the interval $[0,1]$. In such spaces, there is a more delicate relationship between $\Fc$ and $\Pc$. If you choose $\Fc$ to be the collection of all subsets of $[0,1]$, some natural definitions of probability that we would like to have will no longer be valid, satisfy the conditions and axioms of probability. Therefore the normal practice is to define $\Fc$ to be just large enough so that we can talk about interesting classes of probabilities for all the events in $\Fc$. A very natural $\Fc$ when $\Omega =[0,1]$ is to defined it as the smallest collection that contains all the open intervals $(a,b) \subseteq [0,1]$ and satisfies the conditions in \eqref{eq:sigma}.
+\end{remark}
+% It took mathematicians a very long time to put all of this into rigorous footing. The first person to put the probability in rigorous footing is called A.N. Kolmogorov. What we saw here was part of Kolmogorov's axioms of what should the pobability space look like
 
+% F becomes very very large very quickly for countable sets (2^2^n) but still it is okay. When $\Omega$ is uncountably infinity, then things can go wrong, then F becomes the powerset of uncountably infinite set and that will cause a lot of issues and it goes into axioms of set theory and logic. This is covered in the class IERG6300 which does formal probability using measure theory.
 
 % \textit{Luckily for us}: We will be dealing with spaces with countable number of outcomes most of the time and not really have to get into the messy details associated with uncountable outcomes. In cases where we do deal with uncountable spaces, we will still try to keep things simple and at an intuitive level (which can be made rigorous).
 
- \begin{exmp}[Single Coin Toss]{em:ct} The outcomes of a single coin toss:\\
+\begin{exmp}[Single Coin Toss]{em:ct} The outcomes of a single coin toss:\\
  $\Omega = \{H,T\}$ and $\mathcal{F} = \{ \emptyset, \{H\}, \{T\}, \{H,T\}\}$.
- \end{exmp}
+\end{exmp}
 
- \begin{exmp}[Two Coin Tosses]{em:tct} The outcomes of two coin tosses:\\
+\begin{exmp}[Two Coin Tosses]{em:tct} The outcomes of two coin tosses:\\
  $\Omega = \{HH,HT,TH,TT\}$ and $\mathcal{F} = \{ \emptyset, \{HH\}, \{HT\}, \{TH\}, \{TT\}, \{HH,HT\},\\ \{HH,TH\},\{HH,TT\},\{HT,TH\}, \{HT,TT\},\{TH,TT\},\{HH,HT,TH\},\{HH,HT,TT\},\\ \{HH,TH,TT\},\{HT,TH,TT\},  \{HH,HT,TH,TT\} \}$.
- \end{exmp}
- In this example, identify the following:
- \begin{itemize}
-     \item The event corresponding to "outcomes of both tosses being the same".
-     \item The event corresponding to "first coin toss results in a head".
-     \item The event corresponding to "either the first coin toss did not result in a H or the second coin toss did not result in a T".
- \end{itemize}
+\end{exmp}
+In this example, identify the following:
+\begin{itemize}
+     \item The event corresponding to ``the outcome of the second coin toss is different from the outcome of the first toss'' % HT TH
+     \item The event corresponding to ``outcomes of both tosses being the same''.
+     \item The event corresponding to ``first coin toss results in a head''.
+     \item The event corresponding to ``either the first coin toss did not result in a H or the second coin toss did not result in a T''.
+\end{itemize}
 
- For this experiment we can define many probability functions. Here are two of them:
- \begin{itemize}
-     \item $\Pc_1(\{HH\}) = \frac 12$ and $\Pc_1(\{TT\})=\frac 12$.
-     \item $\Pc_2(\{HH\}) = 0.2601$, $\Pc_2(\{HT\})= \Pc_2(\{HT\}) = 0.2499$, $\Pc_2(\{TT\})=0.2401$.
- \end{itemize}
+For this experiment we can define many probability functions. Here are two of them:
 
- \subsection{Finite sample space}
+% As mentioned earlier, it's not necessary to specify the probabilities of each outcome to satisfy the rules of probability. Take the following example:
+% p({{HH},{HT}}) = 0.3
+% p({{HH},{TH}}) = 0.5
+% p({{HH},{TT}}) = 0.4
+% from these probabilities given to the three events, and the laws of probability, one can solve the probabilities of each outcome
+\begin{itemize}
+	\item $\Pc_1(\{HH\}) = \frac 12$ and $\Pc_1(\{TT\})=\frac 12$.
+	\item $\Pc_2(\{HH\}) = 0.2601$, $\Pc_2(\{HT\})= \Pc_2(\{HT\}) = 0.2499$, $\Pc_2(\{TT\})=0.2401$.
+\end{itemize}
+%
+% Now we are in good shape when we talk about probability, at least we know what we are talking about
 
- In this case a natural model for $\Fc$ is to set it to $\Fc=2^\Omega$, the power set, i.e. the set of all subsets of $\Omega$. If not specified explicitly, we will assume that $\Fc=2^\Omega$ when $\Omega$ is finite.
 
- \subsubsection{Uniform probability model}
- One of the earliest models of probability that was used when, $|\Omega|$ was finite, was to set $\Pc(\omega)=\frac{1}{|\Omega|}, \forall \omega \in \Omega$.
+\subsection{Finite sample space}
+In this case a natural model for $\Fc$ is to set it to $\Fc=2^\Omega$, the power set, i.e. the set of all subsets of $\Omega$. If not specified explicitly, we will assume that $\Fc=2^\Omega$ when $\Omega$ is finite.
+
+\subsubsection{Uniform probability model}
+One of the earliest models of probability that was used when, $|\Omega|$ was finite, was to set $\Pc(\omega)=\frac{1}{|\Omega|}, \forall \omega \in \Omega$.
 Then $\Pc(A) = \frac{|A|}{|\Omega|}$, and hence $\Pc(A) \propto |A|$. Thus probability and counting became quite intertwined. We call this the \textit{uniform probability model}.
 
 

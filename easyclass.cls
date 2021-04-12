@@ -48,6 +48,8 @@
 %\newtheorem*{soln}{Solution}
 \usepackage{manfnt}
 \reversemarginpar
+
+% Advanced Discussion Symbol
 \newcommand{\adv}{\marginpar{\hfill\dbend}}
 
 
