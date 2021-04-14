@@ -37,7 +37,7 @@ Thus a discrete random variable $X$ take values in some subset $\{x_1, x_2, ...\
 $$ F_X(x) = \sum_{i:x_i \leq x} p_i.$$
 Observe that $F_X(x)$ has a "jump" of $p_i$ at value $x_i$.
 
-Therefore, for discrete valued random variables, it is common to define a \textit{probability-mass-function}, $p_X(x)$ defined as:
+Therefore, for discrete valued random variables, it is common to define a \textit{probability-mass-function (p.m.f.)}, $p_X(x)$ defined as:
 $$ p_X(x_i) = p_i$$
 and $p_X(x)=0 $ if $x \notin \{x_1,x_2,..\}.$
 
@@ -75,12 +75,87 @@ We say $X \sim \textrm{Bin}(n,p)$, $p \in [0,1]$, if
 $$ p_X(k)= \binom{n}{k}p^k(1-p)^{n-k},  0\leq k \leq n. $$
 Observe that $\textrm{Bin}(1,p)$ has the same distribution as $\textrm{Ber}(p)$.
 
-\subsubsection{Geometric Random Variable} This is a random variable that takes  values $\{0,1,2,...\}$.
+\subsubsection{Geometric Random Variable} This is a random variable that takes  values $\{1,2,...\}$.
 
 We say $X \sim \textrm{Geo}(p)$, $p \in [0,1]$, if
-$$ p_X(k)= (1-p) p^{k},  0\leq k, k \in \mathbb{N}. $$
+$$ p_X(k)= (1-p) p^{k-1},  0\leq k, k \in \mathbb{N}. $$
 
 \subsubsection{Poisson Random Variable} This is a random variable that also takes  values $\{0,1,2,...\}$.
 
-We say $X \sim \textrm{Poi}(\lambda)$, $\lambda \geq 0$, if
+We say $X \sim \textrm{Poi}(\lambda)$, $\lambda > 0$, if
 $$ p_X(k)=  \frac{\lambda^{k}}{k!}e^{-\lambda},  0\leq k, k \in \mathbb{N}. $$
+
+Consider binomial random variable $X_n \sim \textrm{Bin}(n, \frac{\lambda}{n})$ for some large $n$. Notice that the success probability $\frac{\lambda}{n}$ is small while the average number of success is a fixed number $\lambda$. By definition the p.m.f is
+$$ p_X(k)= \binom{n}{k}\left( \frac{\lambda}{n}\right) ^k(1-\frac{\lambda}{n})^{n-k},$$
+As $n\to \infty$, one can observe that the limit p.m.f is poisson p.m.f
+\begin{align*}
+\lim_{n\to \infty} \binom{n}{k}\left( \frac{\lambda}{n}\right) ^k(1-\frac{\lambda}{n})^{n-k} &= \lim_{n\to \infty}\frac{n(n-1) \ldots (n-k+1)}{k!}\frac{\lambda ^k}{n^k} (1-\frac{\lambda}{n})^{n-k}\\
+&= \lim_{n\to \infty} \frac{\lambda^k}{k!} \left( 1\times (1-\frac{1}{n}) \times \ldots (1- \frac{k-1}{n})\right) (1-\frac{\lambda}{n})^{n} (1-\frac{\lambda}{n})^{-k}\\
+&= \frac{\lambda^{k}}{k!}e^{-\lambda}
+\end{align*}
+
+
+\begin{remark}
+A natural interpretation of the above four examples of discrete random variables is
+\begin{itemize}
+	\item Bernoulli random variable is to denote the outcome of a coin toss.
+	\item Binomial random variable counts the number of heads in $n$ coin toss.
+	\item Geometric random variable is the number of toss till the first tail occurs.
+	\item Poisson random variable is the limit case of Binomial random variable for large number of toss but average success is fixed.  
+\end{itemize}
+\end{remark}
+
+\subsection{Create discrete random variables}
+\subsubsection{Truncated Geometric random variable}
+Let $X \sim \textrm{Geo}(p)$. We can define $Y_n = \min\{X, n\}$. Then $Y$ is a discrete random variable taking values in $\{ 0, 1, \ldots, n\}$. The p.m.f of $Y_n$ is same as $X_n$ except
+\begin{align*}
+ p_{Y_n}(n) &= P(X\geq n)\\
+ &= \sum_{k=n}^\infty (1-p) p^{k-1}\\
+ &= p^{n-1}
+\end{align*}
+
+\subsubsection{Memoryless property of Geometric random variables}
+Let $X \sim \textrm{Geo}(p)$ be the number of coin toss before first tail occurs. We can define $Y_n$ as the number of coin toss to get first tail given there are $n$ heads occurs already. Then the p.m.f of $Y_n$ is
+\begin{align*}
+	p_{Y_n}(k) &= P(X= n+k | X \geq n)\\
+	&= \frac{P(X=n+k)}{P(X\geq n)}\\
+	&= (1-p)p^{k-1}\\
+	&= p_X(k)
+\end{align*}
+Observe that $P(X=n+k|X\geq n) = P(X=k) $. We call this memoryless property.
+
+
+\section{Continuous Random Variables}
+Random variables can take uncountably many, rather than discrete, values. We can define \textit{cumulative distribution function (c.d.f.)} of a random variable $X$,
+$$F_X(x) = P(X \leq x)$$
+
+It turns out c.d.f must satisfies the following three properties:
+\begin{enumerate}
+	\item $F_X(x)$ is non-decreasing function.
+	\item As $x\to -\infty$, $F_X(x) \to 0$ and as $x \to \infty$, $F_X(x) \to 1$.
+	\item $F_X(x)$ is right-continuous. i.e. $\lim_{x\to t^+} F_X(x) = F_X(t)$.
+\end{enumerate}
+
+If $F_X(x)$ is differentiable, then the \textit{probability density function (p.d.f)} of $X$ is defined as
+$$f_X(x) = \frac{dF_X(x)}{dx}$$
+
+If $X$ has has p.d.f $f_X(x)$,
+$$P(a\leq X \leq b) = \int_a^b f_X(t) dt$$
+
+\subsubsection{Uniform random variable}
+We say $X\sim \textrm{Unif} (a,b)$, for $a<b$, a uniform random variable if its p.d.f is
+$$f_X(x) = \frac{x-a}{b-a}, x \in [a,b]$$
+
+\subsubsection{Guassian random variables}
+We say $X\sim \mathcal{N}(\mu, \sigma^2)$ a Gaussian random variable if its p.d.f is
+$$f_X(x) = \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+
+\subsubsection{Random variable with discontinuous distribution function}
+Consider a random variable $X$ be such that $X=0.5$ with probability 0.5 and $X\sim \textrm(Unif)(0,1)$ with probability 0.5. Then the c.d.f of $X$ is
+$$F_X(x) =  \begin{cases}
+	\frac{x}{2}, & \textrm{for $x\in [0, \frac{1}{2})$} \\
+	\frac{1}{2} + \frac{x}{2}, & \textrm{for $x\in [\frac{1}{2}, 1]$}
+	\end{cases}
+$$
+
+
