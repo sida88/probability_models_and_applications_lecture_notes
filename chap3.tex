@@ -2,3 +2,226 @@
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_GB
 %=================================================================
+We first define the expectation for discrete random variables.
+
+Let $X$ be a discrete random variable with p.m.f $p_X(x_i)$. Define \textit{expectation} of $X$ as
+$$\E[X] = \sum_i p_X(x_i) x_i$$
+
+\begin{exmp}{}
+The expecation of Bernouli random variable $X\sim \Bern(p)$ is
+$$\E[X] = 1*p + 0 * (1-p) = p$$
+\end{exmp}
+
+\begin{exmp}{}
+	The expection of Binomial random variable $X\sim \mathrm{Bin}(n,p)$ is
+	\als{
+	\E[X] &= \sum_{k=0}^n \binom{n}{k} p^k (1-p)^{n-k} k\\
+	&= \sum_{k=0}^n \frac{n!}{(k-1)!(n-k)!} p^k (1-p)^{n-k}\\
+	&= \sum_{k=0}^n np \binom{n-1}{k-1} p^{k-1} (1-p)^{n-k} \\
+	&= np (1+1-p)^{n-1}\\
+	&= np
+	}
+\end{exmp}
+
+\begin{exmp}{}
+	The expectation of Geometric random variable $X \sim \Geom(p)$ is
+	\als{
+	\E[X] &= \sum_{k=1}^\infty (1-p) p^{k-1} k \\
+	&= (1-p) \frac{1}{(1-p)^2}\\
+	&= \frac{1}{1-p}
+  }
+\end{exmp}
+
+\begin{exmp}{}
+	The expectation of Poisson random variable $X\sim \Poisson(\lambda)$ is
+	\als{
+	\E[X] &= \sum_{k=0}^\infty \frac{e^{-\lambda} \lambda ^k}{k!} k\\
+	&= 	\sum_{k=1}^\infty e^{-\lambda} \lambda \frac{ \lambda ^{k-1}}{(k-1)!} \\
+	&= e^{-\lambda} \lambda e^\lambda\\
+	&= \lambda
+}
+\end{exmp}
+
+\section{Properties of Expectation}
+For nonnegative random variable $X\geq 0$, i.e. $X(\omega) \geq 0$ for all $\omega\in \Omega$, the expectation is nonnegative since
+$$\E[X] = \sum_x x\P(X=x) = \sum_{x\geq 0} x\P(X=x) \geq 0$$
+
+\subsubsection{Linearity}
+Let $X$ be a random variable and a scalar $a\in \mathbb{R}$. Let $Z=aX$. We will see $\E[Z]=a\E[X]$. In fact, if $a=0$, $\E[Z]=\E[0]=0=a\E[X]$. If $a\neq 0$,
+$$\E[Z] = \sum_z z\P(aX=z) =\sum_z a \frac{z}{a}\P(x=\frac{z}{a}) = a\E[X]$$
+
+Let $X$, $Y$ be any random variable. Consider the sum of $X$ and $Y$, $Z=X+Y$.
+\als{
+\E[Z] &= \sum_z z \P(X+Y = z)\\
+&= \sum_z \sum_x z \P(X+Y = z, X = x)\\ 
+&= \sum_y \sum_x (x+y) \P(X+Y = x+y, X = x)\\ 
+&= \sum_x \sum_y x \P(X=x, Y=y) + \sum_y \sum_x y\P(X=x, Y=y)\\
+&= \sum_x x \P(X=x) + \sum_y y\P(Y=y)\\
+&= \E[X] + \E[Y]
+}
+An important property of expectation is linearity, $$\E[aX+bY]=a\E[X]+b\E[Y], a,b \in \mathbb{R}$$
+
+We can use the linearity to obtain the expectation of Binomial random variable. Let $X_1$, $X_2$,\ldots, $X_n$ be i.i.d $\Bern(p)$ random variables. Then $Z=\sum_{i=1}^n X_i$ is a Binomial random varibable $\mathrm{Bin}(n,p)$.
+$$\E[Z]=\E[\sum_{i=1}^n X_i] = \sum_{i=1}^n \E[X_i] = np$$
+
+Let $X$ be a random varibale taking positive integer values. Compute the following
+\als{
+\sum_{k=1}^\infty \P(X\geq k) &= \sum_{k=1}^\infty \sum_{i=k}^\infty \P(X = i)\\
+&= \sum_{i=1}^\infty \sum_{k=1}^i \P(X=i)\\
+&= \sum_{i=1}^\infty i \P(X=i)\\
+&= \E[X]
+}
+As an example to apply above identity, toss a 7 side dice 5 times. Denote by $X$ the largest value. Then
+$$\P(X\geq k) = 1-\P(X<k) = 1-\left( \frac{k-1}{7}\right) ^5$$
+$$\E[X] = \sum_{k=1}^7 1-\left( \frac{k-1}{7}\right) ^5 = 7-\frac{1^5+2^5+\cdots+6^5}{7^5}$$
+
+Expectation could be infinity. Consider an interger valued random variable $X$ with p.m.f $\P(X=k) = \frac{1}{k(k+1)}$. Indeed the sum 
+$$\sum_{k=1}^\infty \P(X=k) = \sum_{k=1}^\infty \frac{1}{k} - \frac{1}{k+1} = 1$$
+However its expectation is infinity.
+$$\E[X] = \sum_{k=1}^\infty k \frac{1}{k(k+1)} = \infty$$
+
+\subsubsection{Expectation of product of independet variables}
+Let $X$ and $Y$ be independent varibales.
+\als{
+\E[XY] &= \sum_x \sum_y xy \P(X=x, Y=y)\\
+&= \sum_x \sum_y x\P(X=x) y\P(Y=y)\\
+&= \E[X]\E[Y]
+}
+
+\subsubsection{Variance}
+For any random variable $X$, 
+$$\E[X^2] \geq \E[X]^2$$
+To see this, let $Y=X-\E[X]$. As $Y^2\geq 0$, $\E[Y^2] \geq 0$. That is,
+\als{
+\E[Y^2] &= \E\left[X^2 - 2X\E[X]+\E[X]^2\right] \\
+&= \E[X^2]-\E[X]^2\\
+&\geq 0
+}
+
+We define \textit{variance} of $X$ as 
+$$\mathrm{Var}[X] = \E[X^2] - \E[X]^2$$
+
+Consider $Z=aX+bY$, $a,b \in \mathbb{R}$.
+\als{
+\mathrm{Var}[Z] &= \E[a^2X^2+2abXY+b^2Y^2] - a^2\E[X]^2-2ab\E[X]\E[Y]-b^2\E[Y]^2\\
+&= a^2\mathrm{Var}[X]+b^2\mathrm{Var}[Y]+2ab\left( \E[XY]-\E[X]\E[Y]\right) 
+}
+We define covariance of $X$ and $Y$ as 
+$$\mathrm{Cov}(X,Y) = \E[XY]-\E[X]\E[Y]$$
+
+If $X$ and $Y$ are independent, $\mathrm{Cov}(X,Y) = 0$, thus $\mathrm{Var}[a+bY] = a^2\mathrm{Var}[X]+b^2\mathrm{Var}[Y]$
+
+\begin{excr}{}
+Consider a random permutation $\pi$ of $\{1,2,\ldots,n\}$. Let $Z = \left| \{i: \pi(i) = i \} \right|$ the number of fixed points. What is $\E[Z]$
+\end{excr}
+
+\begin{soln}{}
+Let $X_i$ be the indicator of fixed point of $i$, that is,
+$$X_i = \begin{cases} 1, & \textrm{if $\pi(i) = i$}\\
+	0, & \textrm{if $\pi(i) \neq i$}
+\end{cases}
+$$
+Then
+$$\P(X_i = 1) = \frac{\textrm{number of permutation with $\pi(i) = i$}}{\textrm{number of permutation}}=\frac{(n-1)!}{n!} = \frac{1}{n}$$
+So
+$$\E[Z] = \E\left[\sum_{i=1}^n X_i\right]=\sum_{i=1}^n \E[X_i] =n\cdot \frac{1}{n} = 1$$
+\end{soln}
+
+\subsubsection{Jensen's Inequality}
+Let $f(x)$ be a convext function, i.e.
+$$f(ax_1+(1-a)x_2)\leq af(x_1)+(1-a)f(x_2), \forall a\in [0,1]$$
+Jensen's inequality states that
+$$f(\E[X])\leq \E[f(X)]$$
+
+\begin{excr}{}
+The $p$-norm of a random variable $X$ is defined as 
+$$\|X\|_p = \E[|X|^p]^\frac{1}{p}$$
+Show that $p$-norm is increasing in $p$
+\end{excr}
+\begin{soln}
+Let $p\geq q$. We want to show
+$$\E[|X|^p]^\frac{1}{p} \geq \E[|X|^q]^\frac{1}{q}$$
+Let $Y=|X|^q$, it is equivalent to show
+$$\E[Y^\frac{p}{q}] \geq \E[Y]^\frac{p}{q}$$
+Which is immediately from Jensen's inequality since $f(x)=x^\alpha, \alpha \geq 1$ is convex.
+\end{soln}
+
+\section{Borel-Cantelli Lemma}
+Consider a probability sapce $(\Omega, \Fc, \Pc)$. Let $\{A_i\}_{i=1}^\infty$ be a sequence of events in $\Fc$.
+
+Let
+$$B_m = \bigcup_{k=m}^\infty A_k$$
+Then $B_m$ is decreasing, $B_1 \supset B_2 \supset \ldots$. 
+
+Let
+$$B = \bigcap_{m=1}^\infty B_m$$
+
+Then $B$ is the set of outcomes that $A_n$ sequence occurs infinitly often.
+\begin{lemma}[Borel-Cantelli]
+If $\sum_{k=1}^\infty \Pc(A_k) < \infty$, then $\Pc(B) =0$
+\end{lemma}
+\begin{proof}
+As $B_m$ is decreasing,
+$$\Pc(B) = \Pc \left(\bigcap_{m=1}^\infty B_m \right) = \lim_{m\to \infty} \Pc(B_m)$$
+Note that
+$$\Pc(B_m) = \Pc\left(\bigcup_{k=m}^\infty A_k \right) \leq \sum_{k=m}^\infty \Pc(A_k)$$
+Since $\sum_{k=1}^\infty \Pc(A_k)$ converges,
+$$\lim_{m\to \infty} \sum_{k=m}^\infty \Pc(A_k) =0$$
+It follows $\Pc(B) = 0 $.
+\end{proof}
+
+\section{Inequalities}
+\subsection{Markov's inequality}
+\begin{lemma}[Markov's inequality]
+If $X\geq 0$, then 
+$$\P(X \geq a) \leq \frac{\E[X]}{a}, a >0$$
+\end{lemma}
+\begin{proof}
+As $X\geq0$,
+\als{
+E[X] &= \sum_{x<a} x \P(X=x) + \sum_{x\geq a} x\P(X=x)\\
+&\geq \sum_{x\geq a}  x\P(X=x) \\
+&\geq \sum_{x\geq a} a \P(X=x) \\
+&= a\P(X\geq a)
+}
+\end{proof}
+
+\subsection{Chebychev's inequality}
+\begin{lemma}[Chebychev's inequality]
+Let $\mu = \E[X]$, $\sigma^2 = \mathrm{Var}[X]$. Then
+$$\P(|X-\mu|\geq a) \leq \frac{\sigma^2}{a^2}, a>0$$
+\end{lemma}
+\begin{proof}
+This is immediately from Markov's inequality,
+$$\P(|X-\mu|\geq a) =\P(|X-\mu|^2\geq a^2) \leq \frac{\sigma^2}{a^2}$$
+\end{proof}
+
+\section{Conditional Expectation}
+We have defined conditional probalility. We also have conditional expection given an event A.
+$$\E[X|A] = \sum_x x\P(X=x | A)$$
+\begin{exmp}{}
+Consider tossing a dice infinite many times. Denote by $X_i$ the outcome of the i-th toss,
+$$\P(X_i = 1) = \P(X_i = 2) = \ldots =\P(X_i = 6) = \frac{1}{6}$$
+
+Let $T(\omega)=\inf \{i: X_i(\omega) = 3\}$ be the toss to see point 3 for the first time. We have seen
+$$\E[T] = 6$$
+
+Let $A$ be the event tha tall the toss prior to seeing point 3 were all odd numbers,
+$$A=\{3*, 13*, 53*, 113*, 153*, 513*,\ldots\}$$
+
+Then the conditional probability is 
+$$\P(T=i | A) = \frac{\P(T = i, A)}{\P(A)}$$
+$$\P(T=i, A) = \P(\textrm{the first i-1 toss are odd, the i-th toss is 3}) = \left( \frac{1}{3} \right)^{i-1} \frac{1}{6}$$
+$$\P(A) = \sum_i \P(T=i, A) =\frac{1}{4}$$
+
+So the conditional expectation is 
+\als{
+\E[T|A] &= \sum_{i=1}^\infty i \P(T=i|A)\\
+&= \sum_{i=1}^\infty i \left( \frac{1}{3} \right)^{i-1} \frac{2}{3}\\
+&= \frac{1}{\left( 1-\frac{1}{3}\right)^2}\frac{2}{3}\\
+&=\frac{3}{2}
+} 
+\end{exmp}
+
+
+

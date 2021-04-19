@@ -136,6 +136,8 @@ It turns out c.d.f must satisfies the following three properties:
 	\item $F_X(x)$ is right-continuous. i.e. $\lim_{x\to t^+} F_X(x) = F_X(t)$.
 \end{enumerate}
 
+We define \textit{continuous random variable} as random variables whose c.d.f $F_X(x)$ is continuouse \textit{every where}.
+
 If $F_X(x)$ is differentiable, then the \textit{probability density function (p.d.f)} of $X$ is defined as
 $$f_X(x) = \frac{dF_X(x)}{dx}$$
 
@@ -143,14 +145,70 @@ If $X$ has has p.d.f $f_X(x)$,
 $$P(a\leq X \leq b) = \int_a^b f_X(t) dt$$
 
 \subsubsection{Uniform random variable}
-We say $X\sim \textrm{Unif} (a,b)$, for $a<b$, a uniform random variable if its p.d.f is
-$$f_X(x) = \frac{x-a}{b-a}, x \in [a,b]$$
+We say $X\sim \textrm{Unif} (a,b)$, for $a<b$, a uniform random variable if its c.d.f is 
+$$F_X(x) = \begin{cases}
+	0 & x < a\\
+	\frac{x-a}{b-a} &  x \in [a,b] \\
+	1 & x > b
+\end{cases} $$
+The distribution function is dipicted below \ref{fig:uniform}
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\draw[thick,->] (0,0) -- (4.5,0);
+		\draw[thick,->] (0,0) -- (0,2.5);
+		\draw[thick] (0.5,0) -- (2.5,2);
+		\node[below] at (0.5,0) {a};
+		\draw[thick] (2.5,2) -- (4,2);
+		\node[below] at (2.5,0) {b};
+		\node[left] at (0,2) {1};
+		\node[left] at (0,0) {0};
+		\draw[dashed] (0,2) -- (2.5,2);
+		\draw[dashed] (2.5,0) -- (2.5,2);
+	\end{tikzpicture}
+	\caption{Uniform distribution function}
+	\label{fig:uniform}
+\end{figure}
+
+Its p.d.f is defined except at $x=a$ and $x=b$
+$$f_X(x) = \begin{cases}
+	\frac{1}{b-a} &  x \in [a,b] \\
+	0 & \textrm{elsewhere}
+\end{cases} $$
+
+\subsubsection{Exponential random variables}
+We say $X\sim \exp(\lambda)$ a exponential random variable if its c.d.f is
+$$F_X(x) = 1 - \exp(-\lambda x), x\geq 0$$
+and 0 elsewhere. It is dipicted below \ref{fig:exponential}
+
+\begin{figure}[h]\centering
+	\begin{tikzpicture}
+		\draw[thick,->] (0,0) -- (4.5,0);
+		\draw[thick,->] (0,0) -- (0,2.3);
+		\node[left] at (0,0) {0};
+		\draw[scale = 2, domain=0:2, smooth, variable=\x, blue] plot ({\x}, {1-exp(-\x)});
+	\end{tikzpicture}
+	\label{fig:exponential}
+	\caption{Exponential distribution function}
+\end{figure}
+
 
 \subsubsection{Guassian random variables}
 We say $X\sim \mathcal{N}(\mu, \sigma^2)$ a Gaussian random variable if its p.d.f is
 $$f_X(x) = \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+The p.d.f is dipicted below \ref{fig:norm}
+\begin{figure}[h]\centering
+	\begin{tikzpicture}
+		\draw[thick,->] (-3,0) -- (3,0);
+		\draw[thick,->] (0,0) -- (0,2.7);
+		\node[below] at (0,0) {0};
+		\draw[scale=1.5, domain=-1.5:1.5, smooth, variable=\x, blue] plot ({\x}, {2*exp(-\x*\x*2)/sqrt(pi/2)});
+	\end{tikzpicture}
+	\label{fig:norm}
+	\caption{p.d.f of $\mathcal{N}(0,1)$}
+\end{figure}
 
-\subsubsection{Random variable with discontinuous distribution function}
+\section{Random variable with discontinuous distribution function}
 Consider a random variable $X$ be such that $X=0.5$ with probability 0.5 and $X\sim \textrm(Unif)(0,1)$ with probability 0.5. Then the c.d.f of $X$ is
 $$F_X(x) =  \begin{cases}
 	\frac{x}{2}, & \textrm{for $x\in [0, \frac{1}{2})$} \\
