@@ -2,6 +2,7 @@
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_GB
 %=================================================================
+\section{Expectation for discrete random variables}
 We first define the expectation for discrete random variables.
 
 Let $X$ be a discrete random variable with p.m.f $p_X(x_i)$. Define \textit{expectation} of $X$ as
@@ -196,32 +197,136 @@ This is immediately from Markov's inequality,
 $$\P(|X-\mu|\geq a) =\P(|X-\mu|^2\geq a^2) \leq \frac{\sigma^2}{a^2}$$
 \end{proof}
 
+\section{Expectation for continuous random variables}
+The expectation for continuous random variable is similar to that for discrete random variables but need to push the sumation to limit using integral over continous outcomes.
+
+For a continuous random variable $X$ with p.d.f $f_X(x)$, the expectation is defined as
+$$E[X] = \int_{-\infty}^{\infty} xf_X(x) dx$$
+
+\begin{exmp}{}
+The expectation of uniform random variable $X\sim \textrm{Unif}(a+b)$ is
+\als{
+	\E[X] &= \int_{-\infty}^\infty x f_X(x) dx\\
+	&= \int_a^b \frac{x}{b-a} dx\\
+	&= \frac{(b^2-a^2)}{2(b-a)}\\
+	&= \frac{a+b}{2}
+}
+which in line with intuition that expetation is ``average'' of outcomes.
+\end{exmp}
+
+\begin{exmp}{}
+	The expectation of exponential random variable $X\sim \textrm{Exp}(\lambda)$ is
+	\als{
+		\E[X] &= \int_{-\infty}^\infty x f_X(x) dx\\
+		&= \int_0^\infty x\lambda e^{-\lambda x} dx\\
+		&= \int_0^\infty -x d e^{-\lambda x}\\
+		&= \left. -x  e^{-\lambda x} \right|_{0}^\infty + \int_0^\infty e^{-\lambda x} dx\\
+		&= \frac{1}{\lambda}
+	}
+\end{exmp}
+
 \section{Conditional Expectation}
 We have defined conditional probalility. We also have conditional expection given an event A.
 $$\E[X|A] = \sum_x x\P(X=x | A)$$
 \begin{exmp}{}
-Consider tossing a dice infinite many times. Denote by $X_i$ the outcome of the i-th toss,
-$$\P(X_i = 1) = \P(X_i = 2) = \ldots =\P(X_i = 6) = \frac{1}{6}$$
-
-Let $T(\omega)=\inf \{i: X_i(\omega) = 3\}$ be the toss to see point 3 for the first time. We have seen
-$$\E[T] = 6$$
-
-Let $A$ be the event tha tall the toss prior to seeing point 3 were all odd numbers,
-$$A=\{3*, 13*, 53*, 113*, 153*, 513*,\ldots\}$$
-
-Then the conditional probability is 
-$$\P(T=i | A) = \frac{\P(T = i, A)}{\P(A)}$$
-$$\P(T=i, A) = \P(\textrm{the first i-1 toss are odd, the i-th toss is 3}) = \left( \frac{1}{3} \right)^{i-1} \frac{1}{6}$$
-$$\P(A) = \sum_i \P(T=i, A) =\frac{1}{4}$$
-
-So the conditional expectation is 
-\als{
-\E[T|A] &= \sum_{i=1}^\infty i \P(T=i|A)\\
-&= \sum_{i=1}^\infty i \left( \frac{1}{3} \right)^{i-1} \frac{2}{3}\\
-&= \frac{1}{\left( 1-\frac{1}{3}\right)^2}\frac{2}{3}\\
-&=\frac{3}{2}
-} 
+	Consider tossing a dice infinite many times. Denote by $X_i$ the outcome of the i-th toss,
+	$$\P(X_i = 1) = \P(X_i = 2) = \ldots =\P(X_i = 6) = \frac{1}{6}$$
+	
+	Let $T(\omega)=\inf \{i: X_i(\omega) = 3\}$ be the toss to see point 3 for the first time. We have seen
+	$$\E[T] = 6$$
+	
+	Let $A$ be the event tha tall the toss prior to seeing point 3 were all odd numbers,
+	$$A=\{3*, 13*, 53*, 113*, 153*, 513*,\ldots\}$$
+	
+	Then the conditional probability is 
+	$$\P(T=i | A) = \frac{\P(T = i, A)}{\P(A)}$$
+	$$\P(T=i, A) = \P(\textrm{the first i-1 toss are odd, the i-th toss is 3}) = \left( \frac{1}{3} \right)^{i-1} \frac{1}{6}$$
+	$$\P(A) = \sum_i \P(T=i, A) =\frac{1}{4}$$
+	
+	So the conditional expectation is 
+	\als{
+		\E[T|A] &= \sum_{i=1}^\infty i \P(T=i|A)\\
+		&= \sum_{i=1}^\infty i \left( \frac{1}{3} \right)^{i-1} \frac{2}{3}\\
+		&= \frac{1}{\left( 1-\frac{1}{3}\right)^2}\frac{2}{3}\\
+		&=\frac{3}{2}
+	} 
 \end{exmp}
 
+In continuous case, we define conditional expectation via conditional p.d.f. Given a pair of joint random varibales $X, Y\sim f_{XY}(x,y)$, the p.d.f of $X$ condition on $\{\omega: Y(\omega) = y \}$ (or for short, $Y=y$) is
+$$f_{X|Y=y}(x) = \frac{f_{XY}(x, y)}{f_Y(y)}$$
+Then expectation condition on $Y=y$ is
+$$\E[X|Y=y] = \int_{-\infty}^{\infty} xf_{X|Y=y}(x)dx$$
 
+The conditional expectation of $X$ on $Y$ is then defined as a function of $Y$ \footnote{In rigorous definition, this random variable is measurable with respect to $\sigma(Y)$, meaning $\{\omega: E[X|Y](\omega) \in (a, b) \} = \{\omega: E[X|Y](\omega) \in (c, d) \}$, or informally speaking, information about the two random variable is of same amount.}, which is random variable itself.
+
+
+There are three main properties about conditional expectation,
+\begin{lemma}
+	Let $X$, $Y$ be two random variables,
+	$$\E[\E[X|Y]] = \E[X]$$
+\end{lemma}
+\begin{proof}
+	By definition,
+	\als{
+		\E[\E[X|Y]] &= \int \E[X|Y=y] f_Y(y) dy\\
+					&= \int \left( \int x \frac{f_{XY}(x, y)}{f_Y(y)} dx \right) f_Y(y) dy\\
+					&= \int  \int x f_{XY}(x, y) dy dx \\
+					&= \int x f_X(x) dx \\
+					&= \E[X]
+	}
+\end{proof}
+
+\begin{lemma}
+	Let $X$, $Y$ be two random variables, for any function $g(\cdot)$,
+	$$ \E[Xg(Y)|Y] = g(Y)\E[X|Y]$$
+\end{lemma}
+\begin{proof}
+	For any $y$,
+	$$ \E[Xg(Y)|Y = y] = \int xg(y) f_{X|Y=y}(x) dx = g(y) \E[X|Y=y]$$
+\end{proof}
+
+\begin{lemma}
+	Let $X$, $Y$ be two random variables.
+	$$\E[(X-\E[X|Y])\E[X|Y]] = 0$$
+\end{lemma}
+\begin{proof}
+	\als{
+		\E[(X-\E[X|Y])\E[X|Y]] &= \E[X\E[X|Y]] - \E[\E[X|Y]^2]\\
+						 	   &= \E[\E[X\E[X|Y]|Y]] - \E[\E[X|Y]^2]\\
+						 	   &= \E[\E[X|Y]^2]- \E[\E[X|Y]^2]
+	}
+\end{proof}
+
+\begin{excr}{}
+	Let $$
+	(X, Y) \sim f_{XY} = \begin{cases} \frac{3}{2} (x^2+y^2), & 0<x,y<1\\
+		0, & \textrm{otherwise}
+		\end{cases}
+	$$ 
+	Compute $f_X(x)$, $f_Y(y)$. And let $Z=\E[X|Y]$, compute $Z(y)$ for $y\in (0,1)$. 
+\end{excr}
+\begin{soln}{}
+	By definition, when $0<x<1$,
+	\als{
+		f_X(x) &= \int_{-\infty}^\infty f_{XY}(x,y) dy\\
+			   &= \int_0^1 \frac{3}{2} (x^2 + y^2) dy\\
+			   &= \frac{3x^2}{2}+\frac{1}{2}
+	}
+	$f_X(x) = 0$ otherwise.
+	
+	Same for $f_Y(y)$ by symmetry.
+	$$ f_Y(y) = \begin{cases}
+		\frac{3y^2}{2}+\frac{1}{2} & 0<y<1\\
+		0 & \textrm{otherwise}
+	\end{cases}$$
+
+	By definition, for $y\in (0,1)$,
+	\als{
+		Z(y) &= \E[X|Y=y]\\
+			 &= \int_0^1 x \frac{3 (x^2+y^2)}{3y^2+1} dx\\
+			 &= \frac{3}{3y^2+1} \int_0^1 x^3+xy^2 dx\\
+			 &= \frac{3}{3y^2+1} (\frac{1}{4}+\frac{y^2}{2})\\
+			 &= \frac{3(1+2y^2)}{4(1+3y^2)}
+	}
+\end{soln}
 
