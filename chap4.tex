@@ -2,4 +2,276 @@
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_GB
 %=================================================================
-\section{Limit theorems}
+\section{Law of Large Number}
+\subsection{Weak Law of Large number}
+Life experience teaches us when you repeat an experiment many times, you will always get average outcome, where the ``average'' is represented by the concept of Expectation we defined in the previous chapter. This intuition can be formally stated by the theorem law of large number.
+
+\begin{theorem}[Weak Law of Large Number]
+	Let $X_1, X_2,\ldots$ be a sequence of uncorrelated random variables with means $\mu_1, \mu_2, \ldots$ and $\sup_n \E[(X_n - \mu_n)^2] \leq \sigma^2$. Then for any $\epsilon>0$,
+	$$\lim_{n\to \infty} \P \left(\left\{\omega: \left| \frac{\sum_{i=1}^{n} (X_i-\mu_i)}{n} \right| >\epsilon \right\}\right) = 0$$
+\end{theorem}
+\begin{proof}
+	To simplify notations, let $Y_i = X_i-\mu_i$. Then $\E[Y_i]=0$, $\E[Y_i^2]\leq \sigma^2$ and $\E[Y_iY_j] = 0$ for $i\neq j$. Let $S_n = \sum_{i=1}^{n} Y_i$. By Markov's inequality,
+	$$\P\left( \frac{|S_n|}{n} > \epsilon \right) = \P\left( |S_n| > n\epsilon \right) < \frac{\E[S_n^2]}{n^2\epsilon^2} $$
+	We can bound $\E[S_n^2]$ as follow
+	\als{
+	\E[S_n^2] &= \E\left[\left( \sum_{i=1}^n Y_i \right)^2 \right] \\
+			  &= \E \left[\sum_{i=1}^n \sum_{j=1}^n Y_iY_j \right] \\
+			  &= \E \left[\sum_{i=1}^n Y_i^2 \right]\\
+			  &\leq n\sigma^2
+ 	}
+ 	Thus
+ 	$$\P\left( \frac{|S_n|}{n} > \epsilon \right) < \frac{\sigma^2}{n\epsilon^2}$$
+ 	The theorem follows by letting $n\to \infty$.
+\end{proof}
+
+\subsection{Strong Law of Large number}
+\begin{theorem}[Strong Law of Large Number]
+	Let $X_1, X_2,\cdots$ be a sequence of 4-wise independent random variables with means $\mu_1, \mu_2, \ldots$ and $\E[(X_i-\mu_i)^4] < \gamma$ for all $i=1,2,\cdots$. Then $\frac{\sum_{i=1}^n (X_i-\mu_i)}{n} \to 0$ almost surely. That is,
+	$$\P\left( \left\{ \omega: \lim_{n\to \infty} \frac{\sum_{i=1}^n (X_i(\omega)-\mu_i)}{n} =0 \right\} \right) = 1$$
+\end{theorem}
+\begin{proof}
+	Let $Y_i = X_i-\mu_i$, $S_n = \sum_{i=1}^n Y_i$. To show the alost sure convergence, we will show the complement event is of zero probability. That is
+	$$\P\left( \left\{ \exists m \textrm{ such that } \left|\frac{S_n}{n} \right| > \frac{1}{m} \textrm{ holds for infinitely many $n$}  \right\} \right) = 0$$
+	Let
+	$$A_n^\epsilon = \left\{\omega: \left| \frac{S_n}{n} \right| > \epsilon \right\}$$
+	$$B_n^\epsilon = \bigcup_{i=n}^\infty A_i =\left\{\left|\frac{S_n}{n} \right| > \epsilon \textrm{ holds for some $i\geq n$}\right\}$$
+	$$B^\epsilon = \bigcap_{i=1}^n B_n^\epsilon = \left\{\left|\frac{S_n}{n} \right| > \epsilon \textrm{ holds for infinitely many $n$}\right\}$$
+	We need to show
+	$$\P\left( \left\{ \bigcup_{m=1}^\infty B^{\frac{1}{m}}  \right\} \right) = 0$$
+	It is enough to show for any $m=1,2,\cdots$,
+	$$\P\left(  B^{\frac{1}{m}} \right) = 0$$
+	Here we apply Borel-Cantelli lemma, it suffices to show
+	$$\sum_{i=1}^n \P(A_i^\frac{1}{m}) < \infty$$
+	In fact,
+	$$\P(A_i^\frac{1}{m}) = \P \left(S_n^4 > \frac{n^4}{m^4} \right) \leq \frac{m^4\E[S_n^4]}{n^4}$$
+	Since $\E[Y_i]=0$ and $Y_i$ are 4-wise independent,
+	$$\E[S_n^4] = \E \left[\left(\sum_{i=1}^n Y_i\right)^4\right] = \E\left[ \sum_i Y_i^4 + \sum_{i<j} 6Y_i^2Y_j^2\right]$$
+	Note that
+	$$\E[Y_i^2]^2 \leq \E[Y_i^4] < \gamma$$
+	So
+	$$\E[S_n^4] < n\gamma + 3n(n-1)\gamma$$
+	$$\P(A_i^\frac{1}{m}) < \frac{m^4 \gamma(3n-2))}{n^3}$$
+	$$\sum_{i=1}^\infty \P(A_i^\frac{1}{m})< 3m^4\gamma \sum_i \frac{1}{n^2} < \infty$$
+	Thus the theorem follows.
+\end{proof}
+
+\begin{remark}
+	Almost sure convergence also holds if $X_i$ are pairwise independent and $\E[|X_i-\mu_i|^{1+\epsilon}]<\infty$ for some $\epsilon > 0$.
+\end{remark}
+
+\section{Central Limit Theorem}
+\begin{theorem}[Central Limit Theorem (CLT)]
+	Suppose $X_1, X_2, \cdots$ are independent identical distributed random variables with means $\mu$ and  variance $\sigma^2$.	
+	
+	Let $Y_n = \frac{\sum_{i=1}^n X_i}{\sqrt{n}}-\sqrt{n}\mu$. Then $Y_n$ converge to $\Nc(0, \sigma)$ in distribuition. That is, the distribution function of $Y_n$ converges pointwisely to normal distribution with mean 0 and variance $\sigma^2$. 
+\end{theorem}
+\begin{proof}[idea of proof]
+	Define \textit{characteristic function} of any random variable $X$ as
+	$$\Phi_X(t) = \E[e^{itX}]$$
+	The characteristic function of gaussian random variable with zero mean and $\sigma^2$ variance is
+	\als{
+		\Phi_Y(t) &= \int e^{itx} \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{x^2}{2\sigma^2}} dx\\
+				  &= \int \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{x^2-2it\sigma^2 x + (it\sigma^2)^2}{2\sigma^2}} e^{-t^2\sigma^2} dx\\
+				  &= e^{-t^2\sigma^2}
+	}
+	It turns out characteristic function uniquely determines the c.d.f of random variables. The theorem is equivalent to show the characteristic function of $Y_n$ converges pointwisely to that of normal distribution.
+	
+	In fact,
+	\als{
+		\Phi_{Y_n} (t) &= \E[e^{\frac{it}{\sqrt{n}} \sum_k (X_k-\mu) }] \\
+					   &= \E[\prod_{k=1}^n e^{\frac{it}{\sqrt{n}} (X_k-\mu)}] \\
+					   &= \E[ e^{\frac{it}{\sqrt{n}} (X_1-\mu)}]^n \\
+					   &= \E[ 1+ \frac{it}{\sqrt{n}} (X_1-\mu) - \frac{t^2}{n} (X_1-\mu)^2+ o(\frac{1}{n})]^n \\
+					   &= \left( 1+ \frac{it}{\sqrt{n}} \E[X_1-\mu] - \frac{t^2}{n} \E[(X_1-\mu)^2] + o(\frac{1}{n}) \right)^n\\
+					   &= \left( 1 - \frac{t^2 \sigma^2}{n} + o(\frac{1}{n}) \right)^n\\
+					   &\to e^{-t^2\sigma^2}
+	}
+\end{proof}
+
+\section{Moment generating function and Characteristic function}
+The moment generating function of a random variable $X$ is defined as
+$$M_X(t) = \E[e^{tX}]$$
+We can compute n-th moment from $M_X(t)$ by taking n-th dericative
+$$\E[X^n] = \left. \frac{d^n}{dt^n} M_X(t) \right|_{t=0}$$
+
+Moment generating function may not exist since $e^{tX}$ is unbounded. The characteristic function of a random variable $X$ is a complex-valued function which is well-defined for any random variable,
+$$\Phi_X(t) = \E[e^{itX}]$$
+
+We will see moment generating function and characteristic function for several random variables.
+
+\subsubsection{Bernoulli random variables}
+Let $X\sim \textrm{Ber}(p)$,
+\als{
+	M_X(t) &= \E[e^{tX}] = \P(X=1) e^t + \P(X=0) = pe^t+1-p\\
+	\Phi_X(t) &= \E[e^{itX}] = pe^{it}+1-p
+}
+
+\subsubsection{Geometric random variables}
+Let $X\sim \textrm{Geo}(p)$,
+\als{
+	M_X(t)	&= \sum_{k=1}^\infty (1-p)p^{k-1} e^{tk} = \frac{(1-p)e^{t}}{1-pe^t}, \textrm{ exists for $t$ s.t $pe^t <1$}\\ 
+	\Phi_X(t) &= \sum_{k=1}^\infty (1-p)p^{k-1} e^{itk} = \frac{(1-p)e^{it}}{1-pe^{it}}
+}
+
+\subsubsection{Binomial random variables}
+Let $X\sim \textrm{Bin}(n,p)$,
+\als{
+	M_X(t) &= \sum_{k=0}^n \binom{n}{k}p^k(1-p)^{n-k}e^{tk}= \sum_{k=0}^n \binom{n}{k}(pe^t)^k(1-p)^{n-k} = (1-p+pe^t)^n\\
+	\Phi_X(t) &= \sum_{k=0}^n \binom{n}{k}p^k(1-p)^{n-k}e^{itk}= \sum_{k=0}^n \binom{n}{k}(pe^{it})^k(1-p)^{n-k} = (1-p+pe^{it})^n
+}
+
+\subsubsection{Poisson random variables}
+Let $X\sim \Poisson(\lambda)$,
+\als{
+	M_X(t) &= \sum_{k=0}^\infty \frac{\lambda^k e^{-\lambda}}{k!} e^{tk} = \sum_{k=0}^\infty \frac{(\lambda e^t)^k e^{-\lambda}}{k!} = e^{\lambda (e^t-1)}\\
+	\Phi_X(t) &= \sum_{k=0}^\infty \frac{\lambda^k e^{-\lambda}}{k!} e^{itk} = \sum_{k=0}^\infty \frac{(\lambda e^{it})^k e^{-\lambda}}{k!} = e^{\lambda (e^{it}-1)}\\
+}
+
+\subsubsection{Uniform random variables}
+Let $X\sim \textrm{Unif}(a,b)$,
+\als{
+	M_X(t) &= \int_{a}^{b} e^{tx} \frac{1}{b-a} dx = \frac{e^{tb}-e^{ta}}{t(b-a)}\\
+	\Phi_X(t) &= \int_{a}^{b} e^{itx} \frac{1}{b-a} dx = \frac{e^{itb}-e^{ita}}{it(b-a)}
+}
+
+\subsubsection{Gaussian random variables}
+Let $X\sim \Nc(\mu, \sigma^2)$,
+\als{
+	M_X(t) &= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2} +tx} dx\\
+			&= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{x^2-2(\mu+\sigma^2t) x+(\mu + \sigma^2t)^2 -\sigma^4t^2-2\mu t \sigma^2}{2\sigma^2}} dx\\
+			&= e^{\mu t + \frac{\sigma^2 t^2}{2}}\\
+	\Phi_X(t) &= e^{i \mu t - \frac{\sigma^2 t^2}{2}}
+}
+
+\subsubsection{Exponemtial random variables}
+Let $X\sim \Exp(\lambda)$,
+\als{
+	M_X(t) &= \int_{0}^{\infty} \lambda e^{-\lambda x} e^{tx} dx = \int_{0}^{\infty} \lambda e^{-(\lambda -t) x} dx = \frac{\lambda}{\lambda-t}, \textrm{ $t\neq \lambda$}\\
+	\Phi_X(t) &= \int_{0}^{\infty} \lambda e^{-\lambda x} e^{itx} dx = \int_{0}^{\infty} \lambda e^{-(\lambda -it) x} dx = \frac{\lambda}{\lambda-it}
+}
+
+\subsubsection{Cauchy random variables}
+Let $X\sim \textrm{Cauchy}(0,1)$ which has p.d.f
+$$f_X(x) = \frac{1}{\pi (1+x^2)}$$
+\als{
+	M_X(t) &= \int_{-\infty}^{\infty} \frac{e^{tx}}{\pi (1+x^2)} dx
+}
+This integal does not exist when $t\neq 0$ since integrand is unbounded. Moment generating function of Cauchy distribution is undefined. However we can calculate characteristic function by Cauchy's residue theorem and contour integrals,
+\als{
+	\Phi_X(t) &= \int_{-\infty}^{\infty} \frac{e^{itx}}{\pi (1+x^2)} dx =  e^{-|t|}
+} 
+Detail derivation can be found in \url{https://en.wikipedia.org/wiki/Residue_theorem}.
+
+\subsection{Applications of moment generating functions and characteristic functions}
+\subsubsection{Factorial moments of Poisson}
+The factorial k-th moment is defined as
+$$\E[Z] = \E[X(X-1)(X-2)\cdots(X-k+1)]$$
+For Poisson random variable $X\sim \Poisson(\lambda)$,
+\als{
+	\E[Z] &= \sum_{l=0}^\infty \frac{(k+l)!}{l!} \frac{e^{-\lambda} \lambda ^ {k+l}}{(k+l)!}\\
+		  &= \sum_{l=0}^\infty \lambda^k \frac{e^{-\lambda} \lambda ^ {l}}{l!}\\
+		  &= \lambda^k
+}
+\subsubsection{Mixture of exponential distribution}
+Let $X\sim \Exp(1)$, $Y\sim \Exp(2)$. $X$, $Y$ are independent. Let $Z = Y$ with probability 0.5 and $Z=X+Y$ with probability 0.5. Then the moment generating function of $Z$ is
+\als{
+	M_Z(t) &= 0.5\E[e^{tZ}|Z=Y]+0.5\E[e^{tZ}|Z=X+Y]\\
+		   &= 0.5\E[e^{tY}]+0.5\E[e^{tX}]\E[e^{tY}]\\
+		   &= \frac{1}{2-t}+\frac{1}{(1-t)(2-t)}\\
+		   &= \frac{1}{1-t},
+}
+which is the moment generating function of $\Exp(1)$. Thus $Z\sim \Exp(1)$.
+\subsubsection{Rotation of Gaussian distribution}
+First let us examine the continuous property of characteristic function
+\begin{lemma}
+	A charactersitic function is uniformly continuous in entire space.
+\end{lemma}
+\begin{proof}
+	For any $t$,
+	\als{
+	|\Phi_X(t+\delta) -\Phi_X(t)| &= | \E[e^{i(t+\delta)X}] - \E[e^{itX}]  |\\
+								  &\leq \int |e^{i(t+\delta)x} - e^{itx}|dF_X(x)\\
+								  &= \int |e^{i\delta x} - 1|dF_X(x)\\
+								  &= \int 2-2\cos (\delta x) dF_X(x)
+	}
+	Since $|2-2\cos (\delta x)|\leq 4|$, by dominant convergent theorem,
+	$$\lim_{\delta \to 0} \int |e^{i\delta x} - 1|dF_X(x) = \int \lim_{\delta \to \delta} |e^{i\delta x} - 1|dF_X(x) = 0$$ 
+	This established the uniform continuity.
+\end{proof}
+
+\begin{theorem}
+	Let $X$ and $Y$ are two independent random variables. In addition, $X+Y$ is independent of $X-Y$. Then X and Y must be Gaussian with same variance.
+\end{theorem}
+\begin{proof}
+	We use characteristic function to prove the theorem. Let $\Phi_X(t), \Phi_Y(t)$ be the characteristic function of $X$ and $Y$ respectively. Since $X+Y$ and $X-Y$ are independent, for any $t_1, t_2 \in \Real$,
+	\als{
+		\E[e^{it_1(X+Y)}e^{it_2(X-Y)}] &= \E[e^{it_1(X+Y)}] \E[e^{it_2(X-Y)}] \\
+									   &= \E[e^{it_1X}]\E[e^{it_1Y}]\E[e^{it_2X}]\E[e^{-it_2Y}]\\
+									   &= \Phi_X(t_1)\Phi_Y(t_1)\Phi_X(t_2)\Phi_Y(-t_2)
+	}
+	on the other hand
+	\als{
+		\E[e^{it_1(X+Y)}e^{it_2(X-Y)}] &= \E[e^{i(t_1+t_2)X}e^{it(t_1-t_2)Y}]\\
+									   &= \Phi_X(t_1+t_2)\Phi_Y(t_1-t_2)
+	}
+	Thus we have
+	\begin{equation}
+		\Phi_X(t_1+t_2)\Phi_Y(t_1-t_2) =\Phi_X(t_1)\Phi_Y(t_1)\Phi_X(t_2)\Phi_Y(-t_2) \label{eq:rotation_gaussian}
+	\end{equation}
+	
+	$\Phi(t)$ is a complex-valued function. We will seperate its magnitute and its phase. Let $\Psi_X (t) = |\Phi_X(t)$, $\Psi_Y (t) = |\Phi_Y(t)|$. Note that $\Phi_Y (-t) = \Phi^*(t)$. Then
+	$$\Psi_X(t_1+t_2)\Psi_Y(t_1-t_2) =\Psi_X(t_1)\Psi_Y(t_1)\Psi_X(t_2)\Psi_Y(t_2)$$
+	Let $t_1 = t_2 = t$. Note that $\Phi(0)=1$, we have
+	$$\Psi_X(2t) =\Psi_X^2(t)\Psi^2_Y(t)$$
+	Let $t_1= -t_2 = t$, then
+	$$\Psi_Y(2t) =\Psi_X^2(t)\Psi^2_Y(t)$$
+	This implies
+	$$\Psi_X(t) =\Psi_Y(t)$$
+	Thus
+	$$\Psi_X(2t) =\Psi_X^4(t)$$
+	We claim 
+	$$\Psi_X(nt) =\Psi_X^{n^2}(t)$$
+	Indeed, let $t_1=(n-1)t$, $t_2=t$, we have
+	$$\Psi_X(nt)\Psi_X((n-2)t) =\Psi_X^2((n-1)t)\Psi_X^2(t) = \Psi_X^{2n^2-4n+4}(t) $$
+	$$\Psi_X(nt) = \Psi_X^{n^2}(t)$$
+	For any rational number $q = \frac{m}{n}$, let $t=\frac{1}{n}$, we have
+	$$\Psi_X(1) = \Psi_X(nt) = \Psi_X^{n^2}(t)$$
+	$$\Psi_X(q) = \psi_X(mt) = \Psi_X^{m^2}(t) = \Psi_X^\frac{m^2}{n^2}(1)=\Psi_X^{q^2}(1)$$
+	
+	Since $\Psi_X(t)$ is continous and rational number is dense in $\Real$, for any $t\in \Real$,
+		$$\Psi_X(r) =\Psi_X^{r^2}(1)=e^{-\sigma^2 r^2}$$
+	where $\Psi_X(1) = e^{-\sigma^2}$.
+	
+	Now let
+	$$\Phi_X(t) = e^{-\sigma^2 t^2} e^{i\phi_X(t)}$$
+	$$\Phi_Y(t) = e^{-\sigma^2 t^2} e^{i\phi_Y(t)}$$
+	Plug back to \ref{eq:rotation_gaussian},
+	$$ \phi_X(t_1+t_2)+\phi_Y(t_1-t_2) = \phi_X(t_1)+\phi_Y(t_1)+\phi_X(t_2) - \phi_Y(t_2)$$
+	Let $t_1=t_2=t$,
+	$$ \phi_X(2t) = 2\phi_X(t)$$
+	Let $t_1=-t_2=t$,
+	$$ \phi_Y(2t) = 2\phi_Y(t)$$
+	We claim
+	$$ \phi_X(nt) = n\phi_X(t)$$
+	$$ \phi_Y(nt) = n\phi_Y(t)$$
+	In fact, Let $t_1=(n-1)t$, $t_2=t$,
+	$$ \phi_X(nt)+\phi_Y((n-2)t) = \phi_X((n-1)t)+\phi_Y((n-1)t)+\phi_X(t) - \phi_Y(t) = n\phi_X(t) + (n-2)\phi_Y(t) $$
+	Let $t_1=(n-1)t$, $t_2=-t$,
+	$$ \phi_X((n-2)t)+\phi_Y(nt) = \phi_X((n-1)t)+\phi_Y((n-1)t)-\phi_X(t) + \phi_Y(t) = (n-2)\phi_X(t) +n\phi_Y(t) $$
+	From induction, we conclude
+	We claim
+	$$ \phi_X(nt) = n\phi_X(t)$$
+	$$ \phi_Y(nt) = n\phi_Y(t)$$
+	Then for any rational number $q=\frac{m}{n}$,
+	$$ \phi_X(1) = \phi_X(n\frac{1}{n}) = n\phi_X(\frac{1}{n})$$
+	$$\phi_X(\frac{m}{n}) = m\phi_X(\frac{1}{n}) = \frac{m}{n}\phi_X(1)$$
+	By continuity, we have for any $t\in \Real$,
+	$$\phi_X(t) = t\phi_X(1)=\mu_X t$$
+	Same for $Y$,
+	$$\phi_Y(t) = t\phi_Y(1)=\mu_Y t$$
+	Hence we have the characterisitic function of $X$ and $Y$:
+	$$\Phi_X(t) = e^{i\mu_Xt - \sigma^2t^2}$$
+	$$\Phi_Y(t) = e^{i\mu_Yt - \sigma^2t^2}$$
+	This means $X$, $Y$ are gaussian random variables with same variance.
+\end{proof}
