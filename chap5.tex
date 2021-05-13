@@ -1,0 +1,381 @@
+% !TeX root = main.tex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_GB
+%=================================================================
+\section{Random Process}
+Random process captures events evolution in time. Discrete random process is a sequence of random variables $X_1, X_2,\cdots$.
+
+\begin{exmp}[Random Walk]{}
+	A bug starts at position $0$. Each time it has half probability to move independently $+1/-1$. The position at time $n$ is $X_n$,
+	$$X_n = \sum_{i=0}^n Y_n$$
+	where $Y_n\sim \Bern(\frac{1}{2})$.
+\end{exmp}
+
+Similarly continuous random process is defined by a mapping $X:(\Real, \Omega) \to \Real$, which constitutes a family of random variables $\{ X_t\}_{t\in \Real}$
+
+\begin{exmp}[Brownian Motion]{}
+ 	The standard Brownian motion or Wiener process $\{W_t\}_{t\geq 0}$ is defined as follow:
+ 	\begin{itemize}
+ 		\item $W_0$ = 0;
+ 		\item $W$ has independent increments: let $t>s$, $W_t- W_s$ is independent of $W_{s^\prime}$ for all $s^\prime \leq s$;
+ 		\item $W$ has Gaussian increments: let $t>s$, $W_t-W_s$ is normally distributed with $0$ mean and $t-s$ variance, $W_t-W_s\sim \Nc(0, t-s)$;
+ 		\item $W$ has continous path, $W_t$ is continous in $t$ almost surely. 
+ 	\end{itemize}
+\end{exmp}
+
+\begin{exmp}[Poisson Process]{}
+	Let $Y_1, Y_2, \cdots$ be a sequence i.i.d exponential random variable $Y_i \sim \Exp(\lambda)$. Poisson process $X_t$ is a integer valued process:
+	$$X_t = \sup \{k: Y_1 +Y_2+\cdots+Y_k \leq t\}$$
+	$$X_0 = 0$$
+\end{exmp}
+
+\section{Markov Chains}
+A distrcete random process $\{X_n\}_{n=1}^\infty$ forms a Markov chain if for any $n$,
+$$\P(X_n = x_n | X_{n-1} = x_{n-1}, \cdots, X_1 = x_1) = \P(X_n = x_n | X_{n-1} = x_{n-1})$$
+\begin{exmp}{}
+	Random walk as we saw before is a markov process, since
+	\als{
+		\P(X_n = x_n | X_{n-1} = x_{n-1}, \cdots, X_1 = x_1) &= \P(Y_n = x_n-x_{n-1} | X_{n-1} = x_{n-1},\cdots, X_1 = x_1)\\
+		  			&=\P(Y_n = x_n-x_{n-1})\\
+		  			&=\P(Y_n = x_n-x_{n-1} | X_{n-1} = x_{n-1})\\
+		  			&= \P(X_n = x_n| X_{n-1} = x_{n-1})
+	}
+\end{exmp}
+
+We call \textit{state space} $S$ the set of all values that $X$ can take. For any $l,m\in S$, the transition probability is the probability that $X$ switch between states
+$$\pi_k(m,l) = \P(X_{k+1} = l |X_{k} = m)$$
+
+If $\pi_k(m,l)$ does not depends on $k$, we call the Markov chain is \textit{stationary} or \textit{time-homogeneous}. We will restrict to time-homogeneous Markov chain with finite state space throughout the following chapter.
+
+\subsection{Stationary Distribution}
+Consider the following two states Markov chain in \ref{fig:markov}.
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\node[circle, draw, minimum size=2cm]    (A)                     {$A$};
+		\node[circle, draw, minimum size=2cm]    (B) [right = of A]      {$B$};
+		\draw[every loop]
+			(A) edge [loop left, auto=left] 	node {$1-\alpha$} (A)
+			(B) edge [loop right, right]		node {$1-\beta$} (B)
+			(A) edge [bend right, auto=right] 	node {$\alpha$} (B)
+			(B) edge [bend right, auto=right]	node {$\beta$} (A);
+	\end{tikzpicture}
+	\caption{A two states Markov chain}
+	\label{fig:markov}
+\end{figure} 
+
+Let $\P(X_{k-1} = A) = p_{k-1}$, then
+\als{
+	\P(X_k = A) &= \P(X_k=A | X_{k-1} = A)\P(X_{k-1}=A)+\P(X_k=A | X_{k-1} = B)\P(X_{k-1}=B)\\
+				&= p_{k-1}(1-\alpha) + (1-p_{k-1})\beta\\
+	\P(X_k = B) &= \P(X_k=B | X_{k-1} = A)\P(X_{k-1}=A)+\P(X_k=B | X_{k-1} = B)\P(X_{k-1}=B)\\
+				&= p_{k-1} \alpha +(1-p_{k-1})(1-\beta)
+}
+It is convanient to write in matrix form
+$$\left(p_k, 1-p_k \right) = \left(p_{k-1},1-p_{k-1}\right) \left( \begin{matrix}
+	1-\alpha & \alpha\\
+	\beta    & 1-\beta
+\end{matrix}\right) $$
+
+The transition matrix $T$ is the matrix where each element is transitional probability, $T_{ij} = \pi(i,j)$. Let $P_k$ denote the probability vector of $k$-th time,
+$$P_k = P_{k-1}T=P_{k-2}T^2 = \cdots = P_0 T^n$$
+
+In the above example, assume $0<\alpha,\beta<1$,
+$$T = \left( \begin{matrix}
+	1-\alpha & \alpha\\
+	\beta    & 1-\beta
+\end{matrix}\right) $$
+
+We can compute the eigenvalue and eigenvector of $T$, which are 
+$$\lambda_1 = 1, v_1=\left(\beta, \alpha \right)$$
+$$\lambda_2 = 1-\alpha-\beta, v_2=\left(1, -1 \right)$$
+Since $v_1,v_2$ are linearly independent, for any initial distribution $P_0$, we can write
+$$P_0 = a_1v_1+a_2v_2$$
+for some scalar $a_1,a_2$. Since $P_0 \cdot (1,1)^T = 1$, $a_1v_1=\left(\frac{\beta}{\alpha+\beta}, \frac{\alpha}{\alpha+\beta} \right) $.
+Then consider
+$$P_k = P_0T^k = (a_1v_1+a_2v_2)T^k = a_1 \lambda_1^k v_1+a_2 \lambda_2^k v_2$$
+$$\lim_{k\to \infty} P_k = a_1v_1 = \left(\frac{\beta}{\alpha+\beta}, \frac{\alpha}{\alpha+\beta} \right)$$
+which does not depends on initial probability distribution of states.
+
+\begin{lemma}
+	Let $T\in \Real^{n\times n}$ be a trasition matrix. Then eigenvalues $\lambda$ of $T$ must satisfy $|\lambda | \leq 1$.
+\end{lemma}
+\begin{proof}
+	Let $x=(x_1,\cdots, x_n)$ be a eigenvector with respect to eigenvalue $\lambda$ of $T$, $\lambda x = xT$. Then for $i=1, \cdots, n$, since $0\leq T_{ij} \leq 1$,
+	\als{
+		\lambda x_i = \sum_{j=1}^n  T_{ji} x_j\\
+		|\lambda| |x_i| \leq \sum_{j=1}^n T_{ji}|x_j|
+	}
+	Summing over $i$, we have
+	$$	|\lambda| \sum_{i=1}^n |x_i| \leq \sum_{j=1}^n \left( \sum_{i=1}^n T_{ji} \right) |x_j| = \sum_{j=1}^n |x_j|$$
+	$$ |\lambda| \leq 1$$
+\end{proof}
+
+A Markov chain is called \textit{irreducible} if for any $k,l\in S$, there exist m such that
+$$\P(X_m=k |X_0=l)>0$$
+
+The period $d_i$ of state $i\in S$ is defined as
+$$d_i = \gcd\{n\geq 1: \P(X_n=i | X_0 = i) >0\}$$
+where $\gcd$ denotes greatest common divisor.
+
+\begin{lemma}
+	If $\P(X_m = i | X_0 = j) >0$ and $\P(X_n = j | X_0=i)>0$, then $d_i = d_j$.
+\end{lemma}
+\begin{proof}
+	Since 
+	\als{
+		\P(X_{m+n} = j |X_0 =j) &\geq \P(X_{m+n} = j, X_m=i |X_0=j)\\
+								&=\P( X_m=i |X_0=j) \P(X_{m+n}=j | X_m=i )\\
+								&=\P( X_m=i |X_0=j) \P(X_{n}=j | X_0=i )
+								&> 0
+	}
+	So $d_j$ divide $m+n$, $d_j|m+n$. For any $k \in \{n\geq 1: \P(X_n=i | X_0 = i) >0\}$,
+	$$\P(X_{m+k+n} = j | X_0=j) \geq \P(X_{m+k+n} = j, X_{m+k} =i, X_m=i | X_0=j) >0$$
+	So $d_j|m+n+k$. This means $d_j|k$, in other words, $d_j$ is a common divisor. Thus $d_j\leq d_i$ since $d_i$ is the greatest common divisor. Similarly $d_i\leq d_j$. Hence $d_i = d_j$.
+\end{proof}
+
+The above lemma shows all states of an irreducible markov chain have same period.
+
+We say a state is \textit{aperiodic} if its period is 1.
+
+\begin{lemma}\label{lemma: aperiodic}
+	A state $i\in S$ is aperiodic if and only if there exsit $m_0$ such that for all $m>m_0$,
+	$$\P(X_m = i |X_0=i)>0$$
+\end{lemma}
+\begin{proof}
+	We denote $A_i = \{n\geq 1: \P(X_n =i|X_0=i)>0 \}$. 
+	
+	First we claim there exist $k$ such that $k\in A_i$ and $k+1 \in A_i$. Suppose not, denote minimum distance $k = \min\{|a-b|: a, b \in A_i\}$. Then $k\geq 2$. Assume $a,b\in A_i$ and $a-b =k$. There must be an element $l$ in $A_i$ which is not a multiple of $k$, otherwise $k$ will be a common divisor. Let $l = mk+r, r = 1,2,\cdots, k-1$. 
+	
+	Since $a,b,l\in A_i$, $ma, mb+l\in A_i$. But $mb+l-ma = r < k$, which contradicts to that minimum distance is $k$. Hence we prove the claim.
+	
+	Then, for any integer $m> k^2$, we can find integer $0\leq d < k$, such that
+	$$m =rk+d = (r-d)k+d(k+1)$$
+	Note that $r-d>0$ since $m>k^2$. Thus for any $m>k^2$,
+	$$\P(X_m = i |X_0=i)\geq \P(X_k = i |X_0=i)^{r-d}\P(X_{k+1} = i |X_0=i)^d > 0 $$
+	Conversely it is easy to see $d_i = 1$ by setting $m=m_0+1$ and $m=m_0+2$.
+\end{proof}
+
+\begin{lemma}\label{lemma:semipos}
+	Let $T$ be the transition matrix of an aperiodic, irreducible and finite state Markov chain. Then there exist $n_0$ such that
+	$T^n_{ij} >0$ for all $n>n_0$.
+\end{lemma}
+\begin{proof}
+	Lemma \ref{lemma: aperiodic} already shows for any $i\in S$, there exist $n_i$ such that
+		$$T^n_{ii} >0, \forall n>n_i$$
+	Since the Markov chain is irreducible, for any $i,j\in S$, there exist $n_{i,j}$ such that
+		$$T^{n_{ij}}_{ij} >0$$
+	Then for any $n>n_{ij}+n_j$,
+		$$T^{n}_{ij} > T^{n_{ij}}_{ij} T^{n-n_{ij}}_{jj} > 0$$
+	The lemma follows by setting $n_0 = max_{i,j} \{n_{ij}+n_j\}$.
+\end{proof}
+
+\begin{theorem}
+	Every aperiodic, irreducible, finite state Markov chain has a unique stationary distribution $\pi^*$ such that
+	$$\pi^* = \pi^* T$$
+\end{theorem}
+\begin{proof}
+	It is equavalent to show the left eigenspace of $T$ with respect to eigenvalue 1 is of dimenstion 1. Since dimension of left eigenspace and right eigen space are same, We show it by considering right eigen space. 
+	
+	Let $v=(v_1,v_2,\cdots,v_n)^T$ be a right eigenvector, i.e. $Tv=v$. Then for any $n=1,2,\cdots$,
+	$$T^n v = v$$
+	
+	By lemma \ref{lemma:semipos}, we can fix a large $n$ such that $T^n_{ij}>0$. Let $m$ be a index of maximum component in $v$. Supposet there exist $v_i<v_m$, Then
+	$$v_m = \sum_j T^n_{mj}v_j < \sum_j T^n_{mj}v_m = v_m $$
+	Thus $v=\alpha(1,1,\cdots,1)^T$, the dimension of eigen space is 1.
+\end{proof}
+
+One can think of stationary distribution as the fraction of time that the process stays in a state.
+$$\lim_{n\to \infty} \frac{1}{n} \sum_{i=1}^{n} 1_{\{X_i = k\}} = \pi_i$$
+\begin{theorem}[Flux theorem] \label{thm:flux}
+	Let $A$ be any subset of states $S$ and $\pi$ be the stationary distribuion. Then
+	$$\sum_{i\in A}\sum_{j\in A^c} \pi_i T_{ij} = \sum_{i\in A^c} \sum_{j\in A} \pi_i T_{ij}$$
+\end{theorem}
+\begin{proof}
+	Since $\pi = \pi T$,
+	$$\pi_j = \sum_{i\in S} \pi_i T_{ij}$$
+	summing over set $A$,
+	$$\sum_{j\in A} \pi_j = \sum_{j\in A} \sum_{i\in S} \pi_i T_{ij} =  \sum_{i\in S} \pi_i \left( \sum_{j\in A} T_{ij} \right)=  \sum_{i\in A} \pi_i \left( \sum_{j\in A} T_{ij} \right)+\sum_{i\in A^c} \pi_i \left( \sum_{j\in A} T_{ij} \right)$$
+	$$\sum_{i\in A} \pi_i \left(1 - \left( \sum_{j\in A} T_{ij} \right) \right) =  \sum_{i\in A^c} \pi_i \left( \sum_{j\in A} T_{ij} \right)$$
+	$$\sum_{i\in A} \pi_i \left( \sum_{j\in A^c} T_{ij} \right)=  \sum_{i\in A^c} \pi_i \left( \sum_{j\in A} T_{ij} \right)$$
+	$$\sum_{i\in A}\sum_{j\in A^c} \pi_i T_{ij}=  \sum_{i\in A^c} \sum_{j\in A} \pi_i T_{ij}$$
+\end{proof}
+
+The above theorem provide an effitient way to compute stationary distribution. Consider the following example.
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\node[circle, draw, minimum size=1cm]    (0)                     {0};
+		\node[circle, draw, minimum size=1cm]    (1) [right = of 0]      {1};
+		\node[circle, draw, minimum size=1cm]    (2) [right = of 1]      {2};
+		\node[draw = none,  minimum size=1cm]	 (3) [right = of 2]      {$\cdots$};
+		\node[circle, draw, minimum size=1cm]    (n) [right = of 3]      {n};
+		\draw[every loop]
+		(0) edge [loop left, left]	 	node {$1-p_0$} 		(0)
+		(0) edge [bend left, above]		node {$p_0$} 		(1)
+		(1) edge [bend left, above] 	node {$p_1$} 		(2)
+		(2) edge [bend left, above]		node {$p_2$} 		(3)
+		(3) edge [bend left, above]		node {$p_{n-1}$} 	(n)
+		(n) edge [loop right, right] 	node {$p_n$} 		(n)
+		(n) edge [bend left, below]		node {$1-p_n$} 		(3)
+		(3) edge [bend left, below] 	node {$1-p_3$}		(2)
+		(2) edge [bend left, below]		node {$1-p_2$} 		(1)
+		(1) edge [bend left, below]		node {$1-p_1$} 		(0);
+	\end{tikzpicture}
+	\caption{Birth-death Markov chain}
+	\label{fig:bdmarkov}
+\end{figure} 
+\begin{exmp}[Birth-Death Markov Chain]{}
+	Consider the Markov chain in \ref{fig:bdmarkov}. Apply Theorem \ref{thm:flux} with $A=\{0\}$,$\{0,1\}$,$\{0,1,2\}$, $\cdots$, $\{0,1,\cdots,n-1\}$, we have
+	\als{
+	\pi_0 p_0 &= \pi_1 (1-p_1)\\
+	\pi_1 p_1 &= \pi_2 (1-p_2) \\
+			  &\cdots \\
+	\pi_{n-1} p_{n-1} &= \pi_n (1-p_{n-1})
+	}
+	Moreover with $\pi_0 +\pi_1+\cdots+\pi_n=1$, we can solve the stationary distribuion $\pi$.
+\end{exmp}
+
+\subsection{Recurrent States}
+Suppose the initial state is $i$. The return time of a state $i$ is defined as
+$$T_i = \inf \{n\geq 1: X_n = i\}$$
+A state $i$ is said \textit{recurrent} if
+$$\lim_{n\to \infty} \P(T_i \leq n) = 1$$
+Otherwise we say the state is \textit{transient}.
+
+\begin{theorem}
+	Denote $\pi^n(i,i) = \P(X_n=i|X_0=i)$ for all $i$ in state space. Then a state $i$ is recurrent if and only if
+	$$\sum_{n=1}^\infty \pi^n(i,i) = \infty$$
+\end{theorem}
+\begin{proof}
+	We denote $T_i^{(1)} = T_i$ and $T_i^{(k)}$ to be the time from the $(k-1)$-th visit to state $i$ to the $k$-th visit to state $i$.
+	$$T_i^{(k)} = \inf \{n>T_i^{k-1}: X_n = i\}-T_i^{(k-1)}$$
+	Since time-homogeneous property, $\{T_i^{(k)}$ is i.i.d.
+	
+	Let $Y_i$ be the number of visit to state $i$ in the whole process.
+	$$Y_i = \sum_{n=1}^\infty 1_{\{X_n = i\}}$$
+	Note that $\sum_{n=1}^\infty \pi^n(i,i) = \E[Y_i]$. On the other hand,
+	\als{
+		\E[Y_i] &= \sum_{n=1}^\infty \P(Y_i \geq n)\\
+				&= \sum_{n=1}^\infty \P(T_i^{(1)} < \infty, T_i^{(2)} < \infty, \cdots, T_i^{(n)} < \infty )\\
+				&= \sum_{n=1}^\infty \P(T_i < \infty)^n
+	}
+	But $\P(T_i < \infty) = \P(\cup_{n=1}^\infty T_i \leq n) =  \lim_{n\to \infty} \P(T_i \leq n)$. Hence $\lim_{n\to \infty} \P(T_i \leq n) = 1 $ if and only if
+	$$\sum_{n=1}^\infty \pi^n(i,i) = \sum_{n=1}^\infty \P(T_i < \infty)^n = \infty$$
+\end{proof}
+
+\subsection{Reversible Markov Chain}
+Let $\delta$ be a probability distribution of state space $S$. We say the Markove chain with transition matrix $T$ \textit{reversible} with respect to $\delta$ if for any $i,j\in S$,
+$$T_{ij} \delta_j = T_{ji} \delta_i$$  
+or equavalently
+$$\P(X_{k+1}=j|X_k=i) \P(X_k=i) = \P(X_{k+1}=i|X_k=j) \P(X_k=j)$$
+In words, running Markov chain backwards cannot be distinguished from running forwards.
+
+\begin{lemma}
+	If a Markov chain is reversible with respect to $\delta$, then $\delta$ is the stationary distribution.
+\end{lemma}
+\begin{proof}
+	By definition,
+	\als{
+	(\delta T)_j = \sum_i \delta_i T_{ij} = \sum_i \delta_j T_{ji} = \delta_j \left( \sum_i T_{ji}\right) = \delta_j 
+	}
+\end{proof}
+
+If $T$ is symmetric, $T_{ij}=T_{ji}$, then it is reversible with respect to uniform distribution $(\frac{1}{n}, \cdots, \frac{1}{n})$. This implies the uniform distribution is the stationary distribution of the Markov chain.
+
+\section{Martingale}
+Consider a random process $X_1, X_2, \cdots$. We define a \textit{filteration} adapted to the process as a sequence of set $\Fc_1\subset \Fc_2 \subset \cdots$, where
+$$\Fc_1 = \sigma(X_1)$$
+$$\Fc_2 = \sigma(X_1, X_2)$$
+$$\cdots$$
+
+Here $\sigma(X_1,\cdots, X_n)$ denotes the smallest sigma-algebra that makes $X_1,\cdots, X_n$ \textit{measuable}, that means, for any open set $\Oc$ in $\Real^n$,
+$$\left\{\omega\in \Omega, (X_1(\omega), \cdots, X_n(\omega))\in  \Oc \right\} \in \sigma(X_1,\cdots, X_n)$$
+By smallest, we mean the intersection of all sigma-algebra where $X_1,\cdots,X_n$ are measuable.
+
+Here is a concrete example. Consider two coin toss. $X_1, X_2$ are the result of the first and the second toss. $X_i = 1$ means a head, $X_i=0$ otherwise. The sample space is
+$$\Omega = \{HH, HT,TH,TT\}$$
+Then 
+$$\Fc_1 = \sigma(X_1) =\{\emptyset, \{HH, HT\}, \{TH, TT\}, \Omega \}$$
+This is the smallest set that makes $X_1$ measuable. For example, regardless of result of $X_2$, 
+$$\{\omega\in \Omega: X_1(\omega)<0.5\} = \{\omega\in \Omega: \textrm{first toss is tail}\} = \{TH,TT \} \in \Fc_1$$
+$$\Fc_2 = \sigma(X_1, X_2)=2^\Omega$$
+where $2^\Omega$ or power set of $\Omega$ is the collection of all subset of $\Omega$.
+$$2^\Omega =\{\emptyset, \{HH\},\{HT\},\{TH\},\{TT\},\{HH,HT\}, \{HH,TH\},\{HH,TT\},\{HT,TH\},\{HT,TT\},\{TH,TT\}$$
+$$\{HH,HT,TH\},\{HH,HT,TT\},\{HH,TH,TT\},\{HT,TH,TT\}, \Omega \}$$
+
+We say $X_1, X_2, \cdots$ adapted to the filteration $\Fc_1,\Fc_2,\cdots$ a \textit{martingale} if for any $n=1,2,\cdots$,
+$$\E[X_{n+1}|\Fc_{n}] = X_n$$ 
+
+We say $X_1, X_2, \cdots$ adapted to the filteration $\Fc_1,\Fc_2,\cdots$ a \textit{super-martingale} if for any $n=1,2,\cdots$,
+$$\E[X_{n+1}|\Fc_{n}] \leq X_n$$ 
+
+We say $X_1, X_2, \cdots$ adapted to the filteration $\Fc_1,\Fc_2,\cdots$ a \textit{sub-martingale} if for any $n=1,2,\cdots$,
+$$\E[X_{n+1}|\Fc_{n}] \geq X_n$$ 
+
+\begin{remark}[Martingale and Markov chain]
+	A Markov chain may not be a martingale. Consider a sequence i.i.d Bernouli random variable $\{X_n\}$. It is a Markov chain because
+	 $$\P(X_{n+1}=x_{n}|X_n=x_n,X_{n-1}= x_{n-1}, \cdots) = \frac{1}{2} = \P(X_{n+1}=x_{n}|X_n=x_n)$$
+	But
+	$$\E[X_{n+1}|\Fc_n] = \E[X_{n+1}]=\frac{1}{2}\neq X_n$$
+	
+	A martingale may not be a Markov chain. Let $X_n= X_{n-1}+Z_nX_{n-2}$ where $Z_n\sim \Bern(0.5)$ is independent of all $\{X_n\}$. Then $X_{n+1}$ is a martingale because
+	$$\E[X_{n+1}|\Fc_n] = X_n+X_{n-1}\E[Z_n]= X_n$$
+	But clearly
+	$$\P(X_{n+1}=x_{n+1}|X_n=x_n) \neq \P(X_{n+1}=x_{n+1}|X_n=x_n,X_{n-1}=x_{n-1})$$
+\end{remark}
+
+
+\section{Stopping Time}
+A non-negative valued random variable $T$ is a \textit{stopping time} with respect to $\{\Fc_n\}$ if for any $n=1,2,\cdots$,
+$$\{\omega: T(\omega) \leq n\} \in \Fc_n$$
+
+\begin{exmp}[Symmetric random walk]{}
+	Let $Z_i \sim \Bern(0.5)$ and $X_n= \sum_{i=1}^n Z_i$. First, we claim $X_n$ is a martingale.
+	\als{
+		\E[X_{n+1}|\Fc_n] &= \E[X_n+Z_{n+1}|\Fc_n] = X_n + \E[Z_{n+1}|\Fc_n] =X_n + \E[Z_{n+1}] = X_n
+	}
+	Let $T$ be the first time to reach 5.
+	$$T=\inf\{n: X_n = 5\}$$
+	Then
+	\als{
+		\{\omega: T(\omega) = k\} = \{\omega: X_1(\omega) \neq 5, \cdots, X_{k-1} \neq 5, X_k=5\} \in \Fc_k
+	}
+	$$\{\omega: T\leq k \} = \cup_{i=1}^k \{\omega: T(\omega) = i\} \in \Fc_k$$
+	So $T$ is a stopping time.
+\end{exmp}
+
+\begin{theorem}[Doob's Optional Stopping Time Theorem]
+	If $\{X_n, \Fc_n\}$ is a martingale and $T$ is a stopping time that satisfies any of the following,
+	\begin{itemize}
+		\item $T$ is bounded;
+		\item $X_{\min \{n, T\}} < c$ almost surely;
+		\item $\E[T]<\infty$ and $|X_n-X_{n-1}|$ is uniformly bounded;
+	\end{itemize}
+	Then $$\E[X_T] = \E[X_1]$$
+\end{theorem}
+
+\begin{excr}{}
+	Consider symmetric random walk $\{X_n\}$ and stopping time
+	$$T= \inf \{n: X_n = -5 \textrm{ or } X_n=20\}$$
+	What is $\E[T]$?
+\end{excr}
+\begin{soln}
+	Since $X_n$ is a martingale,
+	$$\E[X_T]=\E[X_1] = 0$$
+	By definition 
+	$$\E[X_T] = \E[X_T 1_{X_T=-5}]+\E[X_T 1_{X_T=20}]=-5\P(X_T=-5)+20(1-\P(X_T=-5)) = 0$$
+	So $\P(X_T=-5)= \frac{4}{5}$.
+	
+	Consider $Y_n = X_n^2-n$. We claim $Y_n$ is a martingale. In fact
+	\als{
+		\E[Y_{n+1}|\Fc_n] &= \E[(X_n+Z_{n+1})^2-n-1|\Fc_n]\\
+						  &= \E[X_n^2+Z_{n+1}^2+2X_nZ_{n+1}-n-1|\Fc_n]\\
+						  &= X_n^2-n-1+2X_n\E[Z_{n+1}|\Fc_n]+ \E[Z_{n+1}^2|\Fc_n]\\
+						  &= X_n^2-n = Y_n
+	}
+	So $\{Y_n\}$ is a martingale. By Optional Stopping theorem,
+	$$\E[Y_T]=\E[X_T^2-T]=\E[Y_1]=0$$
+	$$\E[T] =\E[X^2_T] = \P(X_T=5)\cdot 25 + \P(X_T=20) \cdot 400 = 100$$ 
+\end{soln}
